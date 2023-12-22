@@ -1,5 +1,8 @@
 package org.gnit.bible
 
+import android.util.SparseArray
+import kotlinx.serialization.json.Json
+import org.gnit.bible.lib.SparseArraySerializer
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -9,7 +12,7 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class BibleUnitTest {
     @Test
     fun addEmptyEntryToMakeSameSizeTest() {
         val listA = listOf("a", "b", "c")
@@ -37,5 +40,11 @@ class ExampleUnitTest {
         assertEquals(listOf("1", "2", "3", "4"), pair2.first)
         assertEquals(listOf("i", "ii", "iii", ""), pair2.second)
         assertEquals("", newListA2.zip(newListB2).last().second)
+    }
+
+    @Test
+    fun testBibleStateIsMaxChapter(){
+        assertTrue(BibleState(book = 1, chapter = 50).isLastChapter())
+        assertTrue(BibleState(book = 19, chapter = 150).isLastChapter())
     }
 }

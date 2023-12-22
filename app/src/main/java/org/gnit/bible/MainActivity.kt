@@ -18,7 +18,15 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
@@ -102,6 +110,8 @@ const val BUTTON_ROUND = 5
 const val BUTTON_TEXT_FONT_SIZE = 15
 const val BUTTON_CONTENT_PADDING = 0
 
+fun getAvailableTranslations() = Translation.entries.filter { it.isAssets() } //TODO add downloaded translations
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -112,6 +122,9 @@ fun Bible(modifier: Modifier = Modifier) {
 
     Scaffold(
         topBar = {
+
+            var menuExpanded by remember { mutableStateOf(false) }
+
             TopAppBar(
                 title = {
                     Text(
@@ -119,8 +132,28 @@ fun Bible(modifier: Modifier = Modifier) {
                         maxLines = 1,
                         overflow = TextOverflow.Clip
                     )
-                }
+                },
+                actions = {
+                    IconButton(onClick = { menuExpanded = !menuExpanded }) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = "menu"
+                        )
+                    }
 
+                    DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
+                        getAvailableTranslations().forEach {translation ->
+                            DropdownMenuItem(
+                                text = { Text(translation.nativeName) },
+                                onClick = { /*TODO*/ }
+                            )
+                        }
+                        DropdownMenuItem(
+                            text = { Text("Settings") },
+                            onClick = { /*TODO*/ }
+                        )
+                    }
+                }
                 //TODO implement menu, settings, etc
 
             )

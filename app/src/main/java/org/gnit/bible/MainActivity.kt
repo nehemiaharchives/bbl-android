@@ -27,6 +27,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,6 +42,7 @@ import org.gnit.bible.ui.widgets.BibleButton
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.Locale
+import kotlin.math.roundToInt
 
 class BibleState(
     val translationPair: TranslationPair = TranslationPair(Translation.webus, null, ReadingMode.SINGLE),
@@ -107,6 +109,9 @@ const val BUTTON_CONTENT_PADDING = 0
 @Composable
 fun Bible(bibleState: BibleState, modifier: Modifier = Modifier) {
 
+    var book by remember { mutableIntStateOf(bibleState.book) }
+    var chapter by remember { mutableIntStateOf(bibleState.chapter) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -128,28 +133,42 @@ fun Bible(bibleState: BibleState, modifier: Modifier = Modifier) {
             ) {
                 BibleButton(
                     buttonText = "-",
-                    onClick = {Log.d("BibleButton", "button clicked")} ,
-                    modifier = Modifier.absolutePadding(left = BUTTON_PADDING.dp).align(Alignment.TopStart)
+                    onClick = {
+                        Log.d("BibleButton", "book minus button button clicked")
+                    } ,
+                    modifier = Modifier
+                        .absolutePadding(left = BUTTON_PADDING.dp)
+                        .align(Alignment.TopStart)
                 )
 
-                var bookSliderPosition by remember { mutableFloatStateOf(0f) }
-
                 Slider(
-                    value = bookSliderPosition,
+                    value = book.toFloat(),
                     onValueChange = {
-                        bookSliderPosition =  it
-                        Log.d("Slider", "book slider value changed to $it")
+                        book =  it.roundToInt()
+                        Log.d("Slider", "book slider value changed to $book")
                     },
                     steps = 66,
                     valueRange = 1f..66f,
-                    thumb = {SliderDefaults.Thumb(interactionSource = remember { MutableInteractionSource() }, modifier = Modifier.width(10.dp).height(10.dp).offset(5.dp, 5.dp)) },
-                    modifier = Modifier.align(Alignment.TopCenter).height(BUTTON_SIZE.dp).absolutePadding(top = 1.dp, left = (BUTTON_SIZE + BUTTON_PADDING).dp, right = (BUTTON_SIZE + BUTTON_PADDING).dp,)
+                    thumb = {SliderDefaults.Thumb(interactionSource = remember { MutableInteractionSource() }, modifier = Modifier
+                        .width(10.dp)
+                        .height(10.dp)
+                        .offset(5.dp, 5.dp)) },
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .height(BUTTON_SIZE.dp)
+                        .absolutePadding(
+                            top = 1.dp,
+                            left = (BUTTON_SIZE + BUTTON_PADDING).dp,
+                            right = (BUTTON_SIZE + BUTTON_PADDING).dp,
+                        )
                 )
 
                 BibleButton(
                     buttonText = "+",
                     onClick = {Log.d("BibleButton", "button clicked")} ,
-                    modifier = Modifier.absolutePadding(right = BUTTON_PADDING.dp).align(Alignment.TopEnd)
+                    modifier = Modifier
+                        .absolutePadding(right = BUTTON_PADDING.dp)
+                        .align(Alignment.TopEnd)
                 )
 
                 when(bibleState.translationPair.readingMode){
@@ -164,27 +183,39 @@ fun Bible(bibleState: BibleState, modifier: Modifier = Modifier) {
                 BibleButton(
                     buttonText = "-",
                     onClick = {Log.d("BibleButton", "button clicked")} ,
-                    modifier = Modifier.align(Alignment.BottomStart).absolutePadding(left = BUTTON_PADDING.dp, bottom = BUTTON_PADDING.dp)
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .absolutePadding(left = BUTTON_PADDING.dp, bottom = BUTTON_PADDING.dp)
                 )
 
-                var chapterSliderPosition by remember { mutableFloatStateOf(0f) }
-
                 Slider(
-                    value = chapterSliderPosition,
+                    value = chapter.toFloat(),
                     onValueChange = {
-                        chapterSliderPosition = it
-                        Log.d("Slider", "chapter slider value changed")
+                        chapter = it.roundToInt()
+                        Log.d("Slider", "chapter slider value changed to $chapter")
                     },
                     steps = 50,
                     valueRange = 1f..50f,
-                    thumb = {SliderDefaults.Thumb(interactionSource = remember { MutableInteractionSource() }, modifier = Modifier.width(10.dp).height(10.dp).offset(5.dp, 5.dp)) },
-                    modifier = Modifier.align(Alignment.BottomCenter).height(BUTTON_SIZE.dp).absolutePadding(left = (BUTTON_SIZE + BUTTON_PADDING).dp, right = (BUTTON_SIZE + BUTTON_PADDING).dp, bottom = (BUTTON_PADDING + 4).dp)
+                    thumb = {SliderDefaults.Thumb(interactionSource = remember { MutableInteractionSource() }, modifier = Modifier
+                        .width(10.dp)
+                        .height(10.dp)
+                        .offset(5.dp, 5.dp)) },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .height(BUTTON_SIZE.dp)
+                        .absolutePadding(
+                            left = (BUTTON_SIZE + BUTTON_PADDING).dp,
+                            right = (BUTTON_SIZE + BUTTON_PADDING).dp,
+                            bottom = (BUTTON_PADDING + 4).dp
+                        )
                 )
 
                 BibleButton(
                     buttonText = "+",
                     onClick = {Log.d("BibleButton", "button clicked")} ,
-                    modifier = Modifier.align(Alignment.BottomEnd).absolutePadding(right = BUTTON_PADDING.dp, bottom = BUTTON_PADDING.dp)
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .absolutePadding(right = BUTTON_PADDING.dp, bottom = BUTTON_PADDING.dp)
                 )
             }
         }

@@ -134,7 +134,10 @@ fun Bible(bibleState: BibleState, modifier: Modifier = Modifier) {
                 BibleButton(
                     buttonText = "-",
                     onClick = {
-                        Log.d("BibleButton", "book minus button button clicked")
+                        if(book != 1){
+                            book--
+                            Log.d("BibleButton", "book changed to $book")
+                        }
                     } ,
                     modifier = Modifier
                         .absolutePadding(left = BUTTON_PADDING.dp)
@@ -165,7 +168,12 @@ fun Bible(bibleState: BibleState, modifier: Modifier = Modifier) {
 
                 BibleButton(
                     buttonText = "+",
-                    onClick = {Log.d("BibleButton", "button clicked")} ,
+                    onClick = {
+                        if (book != 66){
+                            book++
+                            Log.d("BibleButton", "book changed to $book")
+                        }
+                    },
                     modifier = Modifier
                         .absolutePadding(right = BUTTON_PADDING.dp)
                         .align(Alignment.TopEnd)

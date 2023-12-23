@@ -35,7 +35,7 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     jc(Language.ja, 1955, Books.JAPANESE_JC_NUMBER_NAME_MAP, "口語訳");// jc, Japanese, Japanese, Colloquial Japanese
 
     fun isAssets() = when(this){
-        webus, cunp, krv, jc -> true
+        webus, kjv, cunp, krv, jc -> true
         else -> false
     }
 }

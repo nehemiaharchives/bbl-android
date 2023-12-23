@@ -39,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -117,7 +118,8 @@ fun getAvailableTranslations() = Translation.entries.filter { it.isAssets() } //
 @Composable
 fun Bible(modifier: Modifier = Modifier) {
 
-    var bibleState = rememberBibleState()
+    val initialBibleState = rememberBibleState()
+    var bibleState by remember { mutableStateOf(initialBibleState) }
     var bibleTitle by remember { mutableStateOf(bibleState.describeBookChapter()) }
 
     Scaffold(
@@ -145,12 +147,13 @@ fun Bible(modifier: Modifier = Modifier) {
                         getAvailableTranslations().forEach {newTranslation ->
                             DropdownMenuItem(
                                 text = { Text(newTranslation.nativeName) },
-                                onClick = { /*TODO*/
+                                onClick = {
                                     if (bibleState.readingMode == ReadingMode.SINGLE && bibleState.mainTranslation != newTranslation){
-
                                         bibleState = bibleState.copy(mainTranslation = newTranslation)
+                                        bibleTitle = bibleState.describeBookChapter()
+                                        menuExpanded = false
                                         Log.d("DropdownMenuItem", "mainTranslation changed $bibleState")
-                                    }
+                                    } /*TODO implement actions for Bilingual views*/
                                 }
                             )
                         }

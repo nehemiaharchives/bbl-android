@@ -26,7 +26,7 @@ import org.gnit.bible.Translation
 import org.gnit.bible.ui.theme.BibleTheme
 
 const val BIBLE_VIEW_ICON_SPACER = 10
-const val BIBLE_VIEW_ICON = 24
+const val BIBLE_VIEW_ICON = 20
 
 @Composable
 fun TranslationDropDownMenuItem(
@@ -38,7 +38,7 @@ fun TranslationDropDownMenuItem(
     modifier: Modifier = Modifier,
 ){
     Box(modifier = modifier
-        .height(60.dp)
+        .height(55.dp)
         .width(180.dp)
         .absolutePadding(left = 10.dp, right = 5.dp)
     ){

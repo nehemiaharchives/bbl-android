@@ -142,10 +142,16 @@ fun Bible(modifier: Modifier = Modifier) {
                     }
 
                     DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
-                        getAvailableTranslations().forEach {translation ->
+                        getAvailableTranslations().forEach {newTranslation ->
                             DropdownMenuItem(
-                                text = { Text(translation.nativeName) },
-                                onClick = { /*TODO*/ }
+                                text = { Text(newTranslation.nativeName) },
+                                onClick = { /*TODO*/
+                                    if (bibleState.readingMode == ReadingMode.SINGLE && bibleState.mainTranslation != newTranslation){
+
+                                        bibleState = bibleState.copy(mainTranslation = newTranslation)
+                                        Log.d("DropdownMenuItem", "mainTranslation changed $bibleState")
+                                    }
+                                }
                             )
                         }
                         DropdownMenuItem(

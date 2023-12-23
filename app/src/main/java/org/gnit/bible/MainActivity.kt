@@ -19,9 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,18 +37,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.parcelize.Parcelize
 import org.gnit.bible.ui.theme.BibleTheme
 import org.gnit.bible.ui.widgets.BibleButton
+import org.gnit.bible.ui.widgets.TranslationDropDownMenuItem
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import kotlin.math.roundToInt
@@ -72,6 +71,11 @@ data class BibleState(
     fun isLastChapter() = (chapter == Books.maxChapter(book))
     fun lastChapter() = Books.maxChapter(book)
     fun describeBookChapter() = "${mainTranslation.books[book]} $chapter"
+    fun isSingleMain(translationToCompare: Translation) = (readingMode == ReadingMode.SINGLE && mainTranslation == translationToCompare)
+    fun isSideMain(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_SIDE && mainTranslation == translationToCompare)
+    fun isSideMainOrSub(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_SIDE && (mainTranslation == translationToCompare || subTranslation == translationToCompare))
+    fun isUnderMain(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_UNDER && mainTranslation == translationToCompare)
+    fun isUnderMainOrSub(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_UNDER && (mainTranslation == translationToCompare || subTranslation == translationToCompare))
 }
 
 @Composable
@@ -144,21 +148,49 @@ fun Bible(modifier: Modifier = Modifier) {
                     }
 
                     DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
-                        getAvailableTranslations().forEach {newTranslation ->
-                            DropdownMenuItem(
-                                text = { Text(newTranslation.nativeName) },
-                                onClick = {
-                                    if (bibleState.readingMode == ReadingMode.SINGLE && bibleState.mainTranslation != newTranslation){
-                                        bibleState = bibleState.copy(mainTranslation = newTranslation)
+                        getAvailableTranslations().forEach {translationItem ->
+                            TranslationDropDownMenuItem(
+                                bibleState,
+                                translationItem,
+                                onClickSingleIcon = {
+                                    if(bibleState.readingMode == ReadingMode.SINGLE && bibleState.mainTranslation != translationItem){
+                                        Log.d("DropDownMenu", "$translationItem is selected, this will change mainTranslation in SingleView")
+                                        bibleState = bibleState.copy(mainTranslation = translationItem)
                                         bibleTitle = bibleState.describeBookChapter()
                                         menuExpanded = false
                                         Log.d("DropdownMenuItem", "mainTranslation changed $bibleState")
-                                    } /*TODO implement actions for Bilingual views*/
+                                    }else if(bibleState.readingMode != ReadingMode.SINGLE){
+                                        Log.d("DropDownMenu", "Reading Mode will be changed from Bilingual(Side|Under) to Single. mainTranslation will be changed. subTranslation will be null")
+                                        bibleState = bibleState.copy(mainTranslation = translationItem, subTranslation = null, readingMode = ReadingMode.SINGLE)
+                                        bibleTitle = bibleState.describeBookChapter()
+                                        menuExpanded = false
+                                    }
+                                },
+                                onClickSideIcon = {
+                                    if(bibleState.isSingleMain(translationItem)){
+                                        Log.d("DropDownMenu", "in SingleView, no action should be taken when clicking side icon")
+                                    }else{
+                                        Log.d("DropDownMenu", "$translationItem will be added to subTranslation, and ReadingMode will be changed to SIDE")
+                                        bibleState = bibleState.copy(subTranslation = translationItem, readingMode = ReadingMode.BILINGUAL_SIDE)
+                                        bibleTitle = bibleState.describeBookChapter()
+                                        menuExpanded = false
+                                    }
+                                },
+                                onClickUnderIcon = {
+                                    if(bibleState.isSingleMain(translationItem)){
+                                        Log.d("DropDownMenu", "in SingleView, no action should be taken when clicking under icon")
+                                    }else{
+                                        Log.d("DropDownMenu", "$translationItem will be added to subTranslation, and ReadingMode will be changed to UNDER")
+                                        bibleState = bibleState.copy(subTranslation = translationItem, readingMode = ReadingMode.BILINGUAL_UNDER)
+                                        bibleTitle = bibleState.describeBookChapter()
+                                        menuExpanded = false
+                                    }
                                 }
                             )
                         }
+
                         DropdownMenuItem(
-                            text = { Text("Settings") },
+                            text = { Text(stringResource(R.string.settings)) },
                             onClick = { /*TODO*/ }
                         )
                     }

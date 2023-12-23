@@ -8,8 +8,8 @@ enum class Language {
 
 enum class Translation(val language: Language, val year: Int, val books: SparseArray<String>, val nativeName: String) {
     // English World
-    webus(Language.en, 2000, Books.ENGLISH_NUMBER_NAME_MAP, "World English Bible"), // webus 206 english
-    kjv(Language.en, 1611, Books.ENGLISH_NUMBER_NAME_MAP, "King James Version"),
+    webus(Language.en, 2000, Books.ENGLISH_NUMBER_NAME_MAP, "WEB"), // webus 206 english
+    kjv(Language.en, 1611, Books.ENGLISH_NUMBER_NAME_MAP, "KJV"),
 
     // Latin America
     rvr09(Language.es, 1909, SparseArray(0)/* TODO implement */, "Reina Valera"), // rvr09,        Spanish
@@ -34,7 +34,10 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     krv(Language.ko, 1961, Books.KOREAN_NUMBER_NAME_MAP, "개역한글"),// krv, Korean, Korean Revised Version
     jc(Language.ja, 1955, Books.JAPANESE_JC_NUMBER_NAME_MAP, "口語訳");// jc, Japanese, Japanese, Colloquial Japanese
 
-    fun isAssets() = (this == webus || this == jc)
+    fun isAssets() = when(this){
+        webus, cunp, krv, jc -> true
+        else -> false
+    }
 }
 
 enum class ReadingMode { SINGLE, BILINGUAL_SIDE, BILINGUAL_UNDER }

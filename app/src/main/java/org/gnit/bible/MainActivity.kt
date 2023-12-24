@@ -7,18 +7,18 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
@@ -27,7 +27,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -50,7 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.parcelize.Parcelize
 import org.gnit.bible.ui.theme.BibleTheme
+import org.gnit.bible.ui.widgets.BIBLE_VIEW_ICON_SPACER
 import org.gnit.bible.ui.widgets.BibleButton
 import org.gnit.bible.ui.widgets.TranslationDropDownMenuItem
 import java.io.BufferedReader
@@ -206,20 +205,50 @@ fun Bible(modifier: Modifier = Modifier) {
                             )
                         }
 
-                        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.width(163.dp)) {
+                        Box(modifier = modifier
+                            .height(55.dp)
+                            .width(180.dp)
+                            .absolutePadding(left = 20.dp, right = 5.dp)
+                        ) {
+                            Row(modifier.align(Alignment.CenterEnd)) {
+                                if (settingExpanded){
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.rows_white),
+                                        contentDescription = "Rows with plain background",
+                                        modifier = modifier
+                                            .height(20.dp)
+                                            .clickable {
+                                                bibleState =
+                                                    bibleState.copy(isZebraBackground = false)
+                                            },
+                                        tint = if (bibleState.isZebraBackground) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+                                    )
 
-                            if (settingExpanded){
-                                IconButton(onClick = { bibleState = bibleState.copy(isZebraBackground = false) }) {
-                                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.rows_white), contentDescription = "Rows with plain background", modifier.height(20.dp), tint = if (bibleState.isZebraBackground) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary)
+                                    Spacer(modifier = Modifier.width(BIBLE_VIEW_ICON_SPACER.dp))
+
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.rows_zebra),
+                                        contentDescription = "Rows with zebra background",
+                                        modifier = modifier
+                                            .height(20.dp)
+                                            .clickable {
+                                                bibleState =
+                                                    bibleState.copy(isZebraBackground = true)
+                                            },
+                                        tint = if (bibleState.isZebraBackground) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+                                    )
+
+                                    Spacer(modifier = Modifier.width(BIBLE_VIEW_ICON_SPACER.dp))
                                 }
 
-                                IconButton(onClick = { bibleState = bibleState.copy(isZebraBackground = true) }) {
-                                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.rows_zebra), contentDescription = "Rows with zebra background", modifier.height(20.dp), tint = if (bibleState.isZebraBackground) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
-                                }
-                            }
-
-                            IconButton(onClick = { settingExpanded = !settingExpanded }) {
-                                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.settings), contentDescription = "Settings", modifier.height(20.dp), tint = MaterialTheme.colorScheme.secondary)
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.settings),
+                                    contentDescription = "Settings",
+                                    modifier = modifier
+                                        .height(20.dp)
+                                        .clickable { settingExpanded = !settingExpanded },
+                                    tint = MaterialTheme.colorScheme.secondary
+                                )
                             }
                         }
                     }
@@ -230,35 +259,49 @@ fun Bible(modifier: Modifier = Modifier) {
         },
         content = {
             Box(
-                modifier = modifier.absolutePadding(left = 0.dp, top = (BUTTON_SIZE + 30).dp, right = 0.dp, 0.dp).pointerInput(Unit) {
-                    awaitEachGesture {
-                        awaitFirstDown()
-                        do {
-                            val event = awaitPointerEvent()
-                            val oldZoom = zoom
+                modifier = modifier
+                    .absolutePadding(left = 0.dp, top = (BUTTON_SIZE + 30).dp, right = 0.dp, 0.dp)
+                    .pointerInput(Unit) {
+                        awaitEachGesture {
+                            awaitFirstDown()
+                            do {
+                                val event = awaitPointerEvent()
+                                val oldZoom = zoom
 
-                            if (5f < zoom && zoom < 400f){
-                                zoom *= event.calculateZoom()
+                                if (5f < zoom && zoom < 400f) {
+                                    zoom *= event.calculateZoom()
 
-                                Log.d("Scaffold.content Box", "zoom event detected. oldZoom:$oldZoom, new zoom = $zoom")
-                                val intZoomValue = zoom.roundToInt()
-                                if(bibleState.fontSize!= intZoomValue){
-                                    bibleState = bibleState.copy(fontSize = intZoomValue)
-                                    Log.d("Scaffold.content Box", "fontSize changed $bibleState")
+                                    Log.d(
+                                        "Scaffold.content Box",
+                                        "zoom event detected. oldZoom:$oldZoom, new zoom = $zoom"
+                                    )
+                                    val intZoomValue = zoom.roundToInt()
+                                    if (bibleState.fontSize != intZoomValue) {
+                                        bibleState = bibleState.copy(fontSize = intZoomValue)
+                                        Log.d(
+                                            "Scaffold.content Box",
+                                            "fontSize changed $bibleState"
+                                        )
+                                    }
+
+                                } else if (zoom > 400f) {
+                                    zoom = 399.9f
+                                    Log.d(
+                                        "Scaffold.content Box",
+                                        "zoom $zoom is more than 400, no more zooming"
+                                    )
+                                } else if (zoom < 5f) {
+                                    zoom = 5.1f
+                                    Log.d(
+                                        "Scaffold.content Box",
+                                        "zoom $zoom is smaller than 5, no more zooming"
+                                    )
                                 }
 
-                            }else if(zoom > 400f){
-                                zoom = 399.9f
-                                Log.d("Scaffold.content Box", "zoom $zoom is more than 400, no more zooming")
-                            }else if(zoom < 5f){
-                                zoom = 5.1f
-                                Log.d("Scaffold.content Box", "zoom $zoom is smaller than 5, no more zooming")
-                            }
 
-
-                        } while (event.changes.any { it.pressed })
+                            } while (event.changes.any { it.pressed })
+                        }
                     }
-                }
             ) {
 
                 var bookSliderPosition by remember { mutableFloatStateOf(bibleState.book.toFloat()) }
@@ -430,7 +473,9 @@ fun SingleBible(bibleState: BibleState){
             Text(
                 text = "${verse+1} $text",
                 style = TextStyle(fontSize = bibleState.fontSize.sp),
-                modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp).background(background)
+                modifier = Modifier
+                    .absolutePadding(bottom = bibleState.spaceBetweenVerses.dp)
+                    .background(background)
             )
         }
     }
@@ -521,7 +566,9 @@ fun BilingualSideBible(bibleState: BibleState) {
             val background = if(bibleState.isZebraBackground && verse.isEven()) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
 
             Row(
-                modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp).background(background)
+                modifier = Modifier
+                    .absolutePadding(bottom = bibleState.spaceBetweenVerses.dp)
+                    .background(background)
             ) {
                 Text(
                     text = "${verse+1} ${pair.first}",

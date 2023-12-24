@@ -160,7 +160,7 @@ fun Bible(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
 
-            var menuExpanded by remember { mutableStateOf(true) }
+            var menuExpanded by remember { mutableStateOf(false) }
 
             TopAppBar(
                 title = {
@@ -614,10 +614,12 @@ fun BilingualSideBible(bibleState: BibleState) {
             ) {
                 Text(
                     text = "${verse+1} ${pair.first}",
+                    style = TextStyle(fontSize = bibleState.fontSize.sp),
                     modifier = Modifier.weight(1f)
                 )
                 Text(
                     text = "${verse+1} ${pair.second}",
+                    style = TextStyle(fontSize = bibleState.fontSize.sp),
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -657,10 +659,12 @@ fun BilingualUnderBible(bibleState: BibleState) {
 
             Column(modifier = Modifier.background(background)) {
                 Text(
-                    text = "${verse+1} ${pair.first}"
+                    text = "${verse+1} ${pair.first}",
+                    style = TextStyle(fontSize = bibleState.fontSize.sp),
                 )
                 Text(
                     text = "${verse+1} ${pair.second}",
+                    style = TextStyle(fontSize = bibleState.fontSize.sp),
                     modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp)
                 )
             }

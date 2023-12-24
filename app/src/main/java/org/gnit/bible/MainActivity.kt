@@ -59,6 +59,7 @@ import kotlinx.parcelize.Parcelize
 import org.gnit.bible.ui.theme.BibleTheme
 import org.gnit.bible.ui.widgets.BIBLE_VIEW_ICON_SPACER
 import org.gnit.bible.ui.widgets.BibleButton
+import org.gnit.bible.ui.widgets.DROPDOWN_MENU_ITEM_RIGHT_PADDING
 import org.gnit.bible.ui.widgets.TranslationDropDownMenuItem
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -88,6 +89,8 @@ data class BibleState(
     fun isSideMainOrSub(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_SIDE && (mainTranslation == translationToCompare || subTranslation == translationToCompare))
     fun isUnderMain(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_UNDER && mainTranslation == translationToCompare)
     fun isUnderMainOrSub(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_UNDER && (mainTranslation == translationToCompare || subTranslation == translationToCompare))
+    fun narrowerSpaceBetweenVerses() = copy(spaceBetweenVerses = spaceBetweenVerses -1)
+    fun widerSpaceBetweenVerses() = copy(spaceBetweenVerses = spaceBetweenVerses + 1)
 }
 
 @Composable
@@ -208,10 +211,33 @@ fun Bible(modifier: Modifier = Modifier) {
                         Box(modifier = modifier
                             .height(55.dp)
                             .width(180.dp)
-                            .absolutePadding(left = 20.dp, right = 5.dp)
+                            .absolutePadding(left = 20.dp, right = DROPDOWN_MENU_ITEM_RIGHT_PADDING.dp)
                         ) {
                             Row(modifier.align(Alignment.CenterEnd)) {
                                 if (settingExpanded){
+
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.arrows_collapse),
+                                        contentDescription = "Narrower space between verses",
+                                        modifier = modifier
+                                            .height(20.dp)
+                                            .clickable { if(bibleState.spaceBetweenVerses != 1) bibleState = bibleState.narrowerSpaceBetweenVerses() },
+                                        tint = MaterialTheme.colorScheme.secondary
+                                    )
+
+                                    Spacer(modifier = Modifier.width(BIBLE_VIEW_ICON_SPACER.dp))
+
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.arrows_expand),
+                                        contentDescription = "Wider space between verses",
+                                        modifier = modifier
+                                            .height(20.dp)
+                                            .clickable { if(bibleState.spaceBetweenVerses != 50) bibleState = bibleState.widerSpaceBetweenVerses() },
+                                        tint = MaterialTheme.colorScheme.secondary
+                                    )
+
+                                    Spacer(modifier = Modifier.width(BIBLE_VIEW_ICON_SPACER.dp))
+
                                     Icon(
                                         imageVector = ImageVector.vectorResource(id = R.drawable.rows_white),
                                         contentDescription = "Rows with plain background",
@@ -239,6 +265,7 @@ fun Bible(modifier: Modifier = Modifier) {
                                     )
 
                                     Spacer(modifier = Modifier.width(BIBLE_VIEW_ICON_SPACER.dp))
+
                                 }
 
                                 Icon(

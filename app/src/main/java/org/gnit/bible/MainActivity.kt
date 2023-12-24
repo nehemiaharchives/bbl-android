@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -52,6 +53,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -59,9 +61,13 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.ConfigurationCompat
 import kotlinx.parcelize.Parcelize
 import org.gnit.bible.ui.theme.BibleTheme
+import org.gnit.bible.ui.widgets.BIBLE_VIEW_ICON
 import org.gnit.bible.ui.widgets.BIBLE_VIEW_ICON_SPACER
 import org.gnit.bible.ui.widgets.BibleButton
+import org.gnit.bible.ui.widgets.DROPDOWN_MENU_HEIGHT
+import org.gnit.bible.ui.widgets.DROPDOWN_MENU_ITEM_LEFT_PADDING
 import org.gnit.bible.ui.widgets.DROPDOWN_MENU_ITEM_RIGHT_PADDING
+import org.gnit.bible.ui.widgets.DROPDOWN_MENU_WIDTH
 import org.gnit.bible.ui.widgets.TranslationDropDownMenuItem
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -77,7 +83,8 @@ data class BibleState(
     val chapter: Int = 1,
     val fontSize: Int = 16,
     val isZebraBackground: Boolean = false,
-    val spaceBetweenVerses: Int = 1
+    val spaceBetweenVerses: Int = 1,
+    val isFontFamilySerif: Boolean = true
 ): Parcelable{
     fun prevBook() = copy(book = book - 1, chapter = 1)
     fun nextBook() = copy(book = book + 1, chapter = 1)
@@ -166,6 +173,7 @@ fun Bible(modifier: Modifier = Modifier) {
                 title = {
                     Text(
                         text = bibleTitle,
+                        fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif,
                         maxLines = 1,
                         overflow = TextOverflow.Clip
                     )
@@ -224,18 +232,29 @@ fun Bible(modifier: Modifier = Modifier) {
                         }
 
                         Box(modifier = modifier
-                            .height(55.dp)
-                            .width(180.dp)
-                            .absolutePadding(left = 20.dp, right = DROPDOWN_MENU_ITEM_RIGHT_PADDING.dp)
+                            .height(DROPDOWN_MENU_HEIGHT.dp)
+                            .width(DROPDOWN_MENU_WIDTH.dp)
+                            .absolutePadding(left = DROPDOWN_MENU_ITEM_LEFT_PADDING.dp, right = DROPDOWN_MENU_ITEM_RIGHT_PADDING.dp)
                         ) {
                             Row(modifier.align(Alignment.CenterEnd)) {
                                 if (settingExpanded){
 
                                     Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.font_switch),
+                                        contentDescription = "Switch FontFamily between Serif and SansSerif",
+                                        modifier = modifier
+                                            .size(BIBLE_VIEW_ICON.dp)
+                                           .clickable { bibleState = bibleState.copy(isFontFamilySerif = !bibleState.isFontFamilySerif) },
+                                        tint = MaterialTheme.colorScheme.secondary
+                                    )
+
+                                    Spacer(modifier = Modifier.width(BIBLE_VIEW_ICON_SPACER.dp))
+
+                                    Icon(
                                         imageVector = ImageVector.vectorResource(id = R.drawable.arrows_collapse),
                                         contentDescription = "Narrower space between verses",
                                         modifier = modifier
-                                            .height(20.dp)
+                                            .size(BIBLE_VIEW_ICON.dp)
                                             .clickable { if(bibleState.spaceBetweenVerses != 1) bibleState = bibleState.narrowerSpaceBetweenVerses() },
                                         tint = MaterialTheme.colorScheme.secondary
                                     )
@@ -246,7 +265,7 @@ fun Bible(modifier: Modifier = Modifier) {
                                         imageVector = ImageVector.vectorResource(id = R.drawable.arrows_expand),
                                         contentDescription = "Wider space between verses",
                                         modifier = modifier
-                                            .height(20.dp)
+                                            .size(BIBLE_VIEW_ICON.dp)
                                             .clickable { if(bibleState.spaceBetweenVerses != 50) bibleState = bibleState.widerSpaceBetweenVerses() },
                                         tint = MaterialTheme.colorScheme.secondary
                                     )
@@ -257,7 +276,7 @@ fun Bible(modifier: Modifier = Modifier) {
                                         imageVector = ImageVector.vectorResource(id = R.drawable.rows_white),
                                         contentDescription = "Rows with plain background",
                                         modifier = modifier
-                                            .height(20.dp)
+                                            .size(BIBLE_VIEW_ICON.dp)
                                             .clickable {
                                                 bibleState =
                                                     bibleState.copy(isZebraBackground = false)
@@ -271,7 +290,7 @@ fun Bible(modifier: Modifier = Modifier) {
                                         imageVector = ImageVector.vectorResource(id = R.drawable.rows_zebra),
                                         contentDescription = "Rows with zebra background",
                                         modifier = modifier
-                                            .height(20.dp)
+                                            .size(BIBLE_VIEW_ICON.dp)
                                             .clickable {
                                                 bibleState =
                                                     bibleState.copy(isZebraBackground = true)
@@ -287,9 +306,9 @@ fun Bible(modifier: Modifier = Modifier) {
                                     imageVector = ImageVector.vectorResource(id = R.drawable.settings),
                                     contentDescription = "Settings",
                                     modifier = modifier
-                                        .height(20.dp)
+                                        .size(BIBLE_VIEW_ICON.dp)
                                         .clickable { settingExpanded = !settingExpanded },
-                                    tint = MaterialTheme.colorScheme.secondary
+                                    tint = if (settingExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
                                 )
                             }
                         }
@@ -514,7 +533,7 @@ fun SingleBible(bibleState: BibleState){
 
             Text(
                 text = "${verse+1} $text",
-                style = TextStyle(fontSize = bibleState.fontSize.sp),
+                style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
                 modifier = Modifier
                     .absolutePadding(bottom = bibleState.spaceBetweenVerses.dp)
                     .background(background)
@@ -614,12 +633,12 @@ fun BilingualSideBible(bibleState: BibleState) {
             ) {
                 Text(
                     text = "${verse+1} ${pair.first}",
-                    style = TextStyle(fontSize = bibleState.fontSize.sp),
+                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
                     modifier = Modifier.weight(1f)
                 )
                 Text(
                     text = "${verse+1} ${pair.second}",
-                    style = TextStyle(fontSize = bibleState.fontSize.sp),
+                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -660,11 +679,11 @@ fun BilingualUnderBible(bibleState: BibleState) {
             Column(modifier = Modifier.background(background)) {
                 Text(
                     text = "${verse+1} ${pair.first}",
-                    style = TextStyle(fontSize = bibleState.fontSize.sp),
+                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
                 )
                 Text(
                     text = "${verse+1} ${pair.second}",
-                    style = TextStyle(fontSize = bibleState.fontSize.sp),
+                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
                     modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp)
                 )
             }

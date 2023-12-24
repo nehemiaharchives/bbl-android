@@ -29,6 +29,9 @@ import org.gnit.bible.ui.theme.BibleTheme
 const val BIBLE_VIEW_ICON_SPACER = 10
 const val BIBLE_VIEW_ICON = 20
 const val DROPDOWN_MENU_ITEM_RIGHT_PADDING = 10
+const val DROPDOWN_MENU_ITEM_LEFT_PADDING = 20
+const val DROPDOWN_MENU_WIDTH = 200
+const val DROPDOWN_MENU_HEIGHT = 55
 
 @Composable
 fun TranslationDropDownMenuItem(
@@ -44,9 +47,9 @@ fun TranslationDropDownMenuItem(
     val text = if (settingExpanded) translationItem.shortName() else translationItem.nativeName
 
     Box(modifier = modifier
-        .height(55.dp)
-        .width(180.dp)
-        .absolutePadding(left = 20.dp, right = DROPDOWN_MENU_ITEM_RIGHT_PADDING.dp)
+        .height(DROPDOWN_MENU_HEIGHT.dp)
+        .width(DROPDOWN_MENU_WIDTH.dp)
+        .absolutePadding(left = DROPDOWN_MENU_ITEM_LEFT_PADDING.dp, right = DROPDOWN_MENU_ITEM_RIGHT_PADDING.dp)
     ){
         ClickableText(
             text = AnnotatedString(text),

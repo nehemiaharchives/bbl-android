@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
@@ -46,6 +48,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,6 +67,7 @@ data class BibleState(
     val readingMode: ReadingMode = ReadingMode.SINGLE,
     val book: Int = 1,
     val chapter: Int = 1,
+    val isZebraBackground: Boolean = false,
     val spaceBetweenVerses: Int = 1
 ): Parcelable{
     fun prevBook() = copy(book = book - 1, chapter = 1)
@@ -195,14 +199,22 @@ fun Bible(modifier: Modifier = Modifier) {
                             )
                         }
 
-                        DropdownMenuItem(
-                            text = {
-                                Row(horizontalArrangement = Arrangement.End, modifier = Modifier.width(163.dp)) {
-                                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.settings), contentDescription = "Settings", modifier.height(20.dp), tint = MaterialTheme.colorScheme.secondary)
+                        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.width(163.dp)) {
+
+                            if (settingExpanded){
+                                IconButton(onClick = { bibleState = bibleState.copy(isZebraBackground = false) }) {
+                                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.rows_white), contentDescription = "Rows with plain background", modifier.height(20.dp), tint = if (bibleState.isZebraBackground) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary)
                                 }
-                            },
-                            onClick = { settingExpanded = !settingExpanded }
-                        )
+
+                                IconButton(onClick = { bibleState = bibleState.copy(isZebraBackground = true) }) {
+                                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.rows_zebra), contentDescription = "Rows with zebra background", modifier.height(20.dp), tint = if (bibleState.isZebraBackground) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+                                }
+                            }
+
+                            IconButton(onClick = { settingExpanded = !settingExpanded }) {
+                                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.settings), contentDescription = "Settings", modifier.height(20.dp), tint = MaterialTheme.colorScheme.secondary)
+                            }
+                        }
                     }
                 }
                 //TODO implement menu, settings, etc
@@ -351,6 +363,8 @@ fun BiblePreview() {
 
 const val VERSES_COLUMN_FILL_MAX_HEIGHT = 0.999f
 
+fun Int.isEven() = this % 2 == 0
+
 @Composable
 fun SingleBible(bibleState: BibleState){
     val translation = bibleState.mainTranslation
@@ -375,9 +389,12 @@ fun SingleBible(bibleState: BibleState){
             .verticalScroll(rememberScrollState())
     ) {
         verses.forEachIndexed{ verse, text ->
+
+            val background = if(bibleState.isZebraBackground && verse.isEven()) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
+
             Text(
                 text = "${verse+1} $text",
-                modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp)
+                modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp).background(background)
             )
         }
     }
@@ -464,8 +481,11 @@ fun BilingualSideBible(bibleState: BibleState) {
             .verticalScroll(rememberScrollState())
     ) {
         versePairs.forEachIndexed { verse, pair ->
+
+            val background = if(bibleState.isZebraBackground && verse.isEven()) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
+
             Row(
-                modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp)
+                modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp).background(background)
             ) {
                 Text(
                     text = "${verse+1} ${pair.first}",
@@ -507,7 +527,10 @@ fun BilingualUnderBible(bibleState: BibleState) {
             .verticalScroll(rememberScrollState())
     ) {
         versePairs.forEachIndexed { verse, pair ->
-            Column {
+
+            val background = if(bibleState.isZebraBackground && verse.isEven()) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
+
+            Column(modifier = Modifier.background(background)) {
                 Text(
                     text = "${verse+1} ${pair.first}"
                 )

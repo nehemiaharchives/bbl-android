@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,10 +52,9 @@ fun TranslationDropDownMenuItem(
         .width(DROPDOWN_MENU_WIDTH.dp)
         .absolutePadding(left = DROPDOWN_MENU_ITEM_LEFT_PADDING.dp, right = DROPDOWN_MENU_ITEM_RIGHT_PADDING.dp)
     ){
-        ClickableText(
-            text = AnnotatedString(text),
-            onClick = { onClickSingleIcon() },
-            modifier = modifier.align(Alignment.CenterStart).fillMaxWidth()
+        Text(
+            text = text,
+            modifier = modifier.align(Alignment.CenterStart).fillMaxWidth().clickable { onClickSingleIcon() }
         )
 
         if (settingExpanded){

@@ -1,6 +1,7 @@
 package org.gnit.bible
 
 import android.util.SparseArray
+import androidx.compose.ui.text.toUpperCase
 
 enum class Language {
     en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja;
@@ -8,8 +9,8 @@ enum class Language {
 
 enum class Translation(val language: Language, val year: Int, val books: SparseArray<String>, val nativeName: String) {
     // English World
-    webus(Language.en, 2000, Books.ENGLISH_NUMBER_NAME_MAP, "WEB"), // webus 206 english
-    kjv(Language.en, 1611, Books.ENGLISH_NUMBER_NAME_MAP, "KJV"),
+    webus(Language.en, 2000, Books.ENGLISH_NUMBER_NAME_MAP, "World English Bible"), // webus 206 english
+    kjv(Language.en, 1611, Books.ENGLISH_NUMBER_NAME_MAP, "King James Version"),
 
     // Latin America
     rvr09(Language.es, 1909, SparseArray(0)/* TODO implement */, "Reina Valera"), // rvr09,        Spanish
@@ -37,6 +38,12 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     fun isAssets() = when(this){
         webus, kjv, cunp, krv, jc -> true
         else -> false
+    }
+
+    fun shortName() = when(this){
+        webus -> "WEB"
+        cunp, krv, jc -> nativeName
+        else -> name.uppercase()
     }
 }
 

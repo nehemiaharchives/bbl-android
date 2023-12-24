@@ -150,9 +150,12 @@ fun Bible(modifier: Modifier = Modifier) {
                         )
                     }
 
+                    var settingExpanded by remember { mutableStateOf(false) }
+
                     DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
                         getAvailableTranslations().forEach {translationItem ->
                             TranslationDropDownMenuItem(
+                                settingExpanded,
                                 bibleState,
                                 translationItem,
                                 onClickSingleIcon = {
@@ -198,7 +201,7 @@ fun Bible(modifier: Modifier = Modifier) {
                                     Icon(imageVector = ImageVector.vectorResource(id = R.drawable.settings), contentDescription = "Settings", modifier.height(20.dp), tint = MaterialTheme.colorScheme.secondary)
                                 }
                             },
-                            onClick = { /*TODO*/ }
+                            onClick = { settingExpanded = !settingExpanded }
                         )
                     }
                 }

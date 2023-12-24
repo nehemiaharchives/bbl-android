@@ -7,6 +7,9 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +48,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -52,6 +56,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.parcelize.Parcelize
 import org.gnit.bible.ui.theme.BibleTheme
 import org.gnit.bible.ui.widgets.BibleButton
@@ -67,6 +72,7 @@ data class BibleState(
     val readingMode: ReadingMode = ReadingMode.SINGLE,
     val book: Int = 1,
     val chapter: Int = 1,
+    val fontSize: Int = 16,
     val isZebraBackground: Boolean = false,
     val spaceBetweenVerses: Int = 1
 ): Parcelable{
@@ -132,6 +138,7 @@ fun Bible(modifier: Modifier = Modifier) {
     val initialBibleState = rememberBibleState()
     var bibleState by remember { mutableStateOf(initialBibleState) }
     var bibleTitle by remember { mutableStateOf(bibleState.describeBookChapter()) }
+    var zoom by remember { mutableFloatStateOf(bibleState.fontSize.toFloat()) }
 
     Scaffold(
         topBar = {
@@ -223,7 +230,35 @@ fun Bible(modifier: Modifier = Modifier) {
         },
         content = {
             Box(
-                modifier = modifier.absolutePadding(left = 0.dp, top = (BUTTON_SIZE + 30).dp, right = 0.dp, 0.dp)
+                modifier = modifier.absolutePadding(left = 0.dp, top = (BUTTON_SIZE + 30).dp, right = 0.dp, 0.dp).pointerInput(Unit) {
+                    awaitEachGesture {
+                        awaitFirstDown()
+                        do {
+                            val event = awaitPointerEvent()
+                            val oldZoom = zoom
+
+                            if (5f < zoom && zoom < 400f){
+                                zoom *= event.calculateZoom()
+
+                                Log.d("Scaffold.content Box", "zoom event detected. oldZoom:$oldZoom, new zoom = $zoom")
+                                val intZoomValue = zoom.roundToInt()
+                                if(bibleState.fontSize!= intZoomValue){
+                                    bibleState = bibleState.copy(fontSize = intZoomValue)
+                                    Log.d("Scaffold.content Box", "fontSize changed $bibleState")
+                                }
+
+                            }else if(zoom > 400f){
+                                zoom = 399.9f
+                                Log.d("Scaffold.content Box", "zoom $zoom is more than 400, no more zooming")
+                            }else if(zoom < 5f){
+                                zoom = 5.1f
+                                Log.d("Scaffold.content Box", "zoom $zoom is smaller than 5, no more zooming")
+                            }
+
+
+                        } while (event.changes.any { it.pressed })
+                    }
+                }
             ) {
 
                 var bookSliderPosition by remember { mutableFloatStateOf(bibleState.book.toFloat()) }
@@ -394,6 +429,7 @@ fun SingleBible(bibleState: BibleState){
 
             Text(
                 text = "${verse+1} $text",
+                style = TextStyle(fontSize = bibleState.fontSize.sp),
                 modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp).background(background)
             )
         }

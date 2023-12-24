@@ -48,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.ConfigurationCompat
 import kotlinx.parcelize.Parcelize
 import org.gnit.bible.ui.theme.BibleTheme
 import org.gnit.bible.ui.widgets.BIBLE_VIEW_ICON_SPACER
@@ -63,6 +65,7 @@ import org.gnit.bible.ui.widgets.DROPDOWN_MENU_ITEM_RIGHT_PADDING
 import org.gnit.bible.ui.widgets.TranslationDropDownMenuItem
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @Parcelize
@@ -95,8 +98,20 @@ data class BibleState(
 
 @Composable
 fun rememberBibleState(): BibleState {
+
+    val configuration = LocalConfiguration.current
+    val defaultLocale = ConfigurationCompat.getLocales(configuration)[0]?: Locale.ENGLISH
+    val defaultLanguage = defaultLocale.language
+    Log.d("rememberBibleSate", "default language is $defaultLanguage")
+
+    val listOfLanguages = getAvailableTranslations().map { it.language }
+    val bibleLanguage = listOfLanguages.firstOrNull { language -> language.toString() == defaultLanguage }?: Language.en
+    Log.d("rememberBibleSate", "bibleLanguage is determined to $bibleLanguage")
+
+    val initialMainTranslation = bibleLanguage.defaultTranslation()
+
     return rememberSaveable {
-        BibleState()
+        BibleState(mainTranslation = initialMainTranslation)
         //sideView
         //downView
     }

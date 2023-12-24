@@ -5,6 +5,23 @@ import androidx.compose.ui.text.toUpperCase
 
 enum class Language {
     en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja;
+
+    fun defaultTranslation() = when(this){
+        en -> Translation.webus
+        es -> Translation.rvr09
+        pt -> Translation.tb
+        de -> Translation.delut
+        fr -> Translation.lsg
+        ru -> Translation.sinod
+        nl -> Translation.svrj
+        it -> Translation.rdv24
+        pl -> Translation.ubg
+        uk -> Translation.ubio
+        sv -> Translation.sven
+        zh -> Translation.cunp
+        ko -> Translation.krv
+        ja -> Translation.jc
+    }
 }
 
 enum class Translation(val language: Language, val year: Int, val books: SparseArray<String>, val nativeName: String) {

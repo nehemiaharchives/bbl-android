@@ -1,7 +1,14 @@
 package org.gnit.bible
 
 import android.util.SparseArray
-import androidx.compose.ui.text.toUpperCase
+import org.gnit.bible.ui.widgets.enSansFontFamily
+import org.gnit.bible.ui.widgets.enSerifFontFamily
+import org.gnit.bible.ui.widgets.jaSansFontFamily
+import org.gnit.bible.ui.widgets.jaSerifFontFamily
+import org.gnit.bible.ui.widgets.koSansFontFamily
+import org.gnit.bible.ui.widgets.koSerifFontFamily
+import org.gnit.bible.ui.widgets.scSansFontFamily
+import org.gnit.bible.ui.widgets.scSerifFontFamily
 
 enum class Language {
     en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja;
@@ -21,6 +28,20 @@ enum class Language {
         zh -> Translation.cunp
         ko -> Translation.krv
         ja -> Translation.jc
+    }
+
+    fun serifFontFamily() = when(this){
+        en, es, pt, de, fr, ru, nl, it, pl, uk, sv -> enSerifFontFamily
+        zh -> scSerifFontFamily
+        ko -> koSerifFontFamily
+        ja -> jaSerifFontFamily
+    }
+
+    fun sansFontFamily() = when(this){
+        en, es, pt, de, fr, ru, nl, it, pl, uk, sv -> enSansFontFamily
+        zh -> scSansFontFamily
+        ko -> koSansFontFamily
+        ja -> jaSansFontFamily
     }
 }
 

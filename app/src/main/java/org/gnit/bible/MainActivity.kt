@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -54,6 +55,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -69,6 +71,7 @@ import org.gnit.bible.ui.widgets.DROPDOWN_MENU_ITEM_LEFT_PADDING
 import org.gnit.bible.ui.widgets.DROPDOWN_MENU_ITEM_RIGHT_PADDING
 import org.gnit.bible.ui.widgets.DROPDOWN_MENU_WIDTH
 import org.gnit.bible.ui.widgets.TranslationDropDownMenuItem
+import org.gnit.bible.ui.widgets.jaSerifFontFamily
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.Locale
@@ -173,7 +176,7 @@ fun Bible(modifier: Modifier = Modifier) {
                 title = {
                     Text(
                         text = bibleTitle,
-                        fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif,
+                        fontFamily = if (bibleState.isFontFamilySerif) bibleState.mainTranslation.language.serifFontFamily() else bibleState.mainTranslation.language.sansFontFamily(),
                         maxLines = 1,
                         overflow = TextOverflow.Clip
                     )
@@ -533,10 +536,11 @@ fun SingleBible(bibleState: BibleState){
 
             Text(
                 text = "${verse+1} $text",
-                style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
+                style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) translation.language.serifFontFamily() else translation.language.sansFontFamily()),
                 modifier = Modifier
                     .absolutePadding(bottom = bibleState.spaceBetweenVerses.dp)
                     .background(background)
+                    .fillMaxWidth()
             )
         }
     }
@@ -610,6 +614,7 @@ private fun getVersePairs(bibleState: BibleState): List<Pair<String, String>> {
 fun BilingualSideBible(bibleState: BibleState) {
     val readingMode = bibleState.readingMode
     if (readingMode != ReadingMode.BILINGUAL_SIDE) throw IllegalArgumentException("ReadingMode should be ${ReadingMode.BILINGUAL_SIDE} but trying to put $readingMode")
+    if (bibleState.subTranslation == null) throw IllegalArgumentException("ReadingMode should be ${ReadingMode.BILINGUAL_SIDE} so subTranslation is needed but null")
 
     val versePairs = getVersePairs(bibleState)
 
@@ -633,12 +638,12 @@ fun BilingualSideBible(bibleState: BibleState) {
             ) {
                 Text(
                     text = "${verse+1} ${pair.first}",
-                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
+                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) bibleState.mainTranslation.language.serifFontFamily() else bibleState.mainTranslation.language.sansFontFamily()),
                     modifier = Modifier.weight(1f)
                 )
                 Text(
                     text = "${verse+1} ${pair.second}",
-                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
+                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) bibleState.subTranslation.language.serifFontFamily() else bibleState.subTranslation.language.sansFontFamily()),
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -660,6 +665,7 @@ fun BilingualSideBiblePreview(){
 fun BilingualUnderBible(bibleState: BibleState) {
     val readingMode = bibleState.readingMode
     if (readingMode != ReadingMode.BILINGUAL_UNDER) throw IllegalArgumentException("ReadingMode should be ${ReadingMode.BILINGUAL_UNDER} but trying to put $readingMode")
+    if (bibleState.subTranslation == null) throw IllegalArgumentException("ReadingMode should be ${ReadingMode.BILINGUAL_UNDER} so subTranslation is needed but null")
 
     val versePairs = getVersePairs(bibleState)
 
@@ -679,11 +685,11 @@ fun BilingualUnderBible(bibleState: BibleState) {
             Column(modifier = Modifier.background(background)) {
                 Text(
                     text = "${verse+1} ${pair.first}",
-                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
+                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) bibleState.mainTranslation.language.serifFontFamily() else bibleState.mainTranslation.language.sansFontFamily()),
                 )
                 Text(
                     text = "${verse+1} ${pair.second}",
-                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) FontFamily.Serif else FontFamily.SansSerif),
+                    style = TextStyle(fontSize = bibleState.fontSize.sp, fontFamily = if (bibleState.isFontFamilySerif) bibleState.subTranslation.language.serifFontFamily() else bibleState.subTranslation.language.sansFontFamily()),
                     modifier = Modifier.absolutePadding(bottom = bibleState.spaceBetweenVerses.dp)
                 )
             }

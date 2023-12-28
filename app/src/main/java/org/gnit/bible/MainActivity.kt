@@ -163,8 +163,8 @@ fun getAvailableTranslations() = Translation.entries.filter { it.isAssets() } //
 fun Bible(modifier: Modifier = Modifier) {
 
     val initialBibleState = rememberBibleState()
-    var bibleState by remember { mutableStateOf(initialBibleState) }
-    var bibleTitle by remember { mutableStateOf(bibleState.describeBookChapter()) }
+    var bibleState by rememberSaveable { mutableStateOf(initialBibleState) }
+    var bibleTitle by rememberSaveable { mutableStateOf(bibleState.describeBookChapter()) }
     var zoom by remember { mutableFloatStateOf(bibleState.fontSize.toFloat()) }
 
     Scaffold(

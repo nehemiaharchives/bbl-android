@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -173,6 +174,9 @@ fun Bible(modifier: Modifier = Modifier) {
             var menuExpanded by remember { mutableStateOf(false) }
 
             TopAppBar(
+                modifier = Modifier
+                    .height(55.dp)
+                    .padding(vertical = 15.dp),
                 title = {
                     Text(
                         text = bibleTitle,
@@ -237,7 +241,10 @@ fun Bible(modifier: Modifier = Modifier) {
                         Box(modifier = modifier
                             .height(DROPDOWN_MENU_HEIGHT.dp)
                             .width(DROPDOWN_MENU_WIDTH.dp)
-                            .absolutePadding(left = DROPDOWN_MENU_ITEM_LEFT_PADDING.dp, right = DROPDOWN_MENU_ITEM_RIGHT_PADDING.dp)
+                            .absolutePadding(
+                                left = DROPDOWN_MENU_ITEM_LEFT_PADDING.dp,
+                                right = DROPDOWN_MENU_ITEM_RIGHT_PADDING.dp
+                            )
                         ) {
                             Row(modifier.align(Alignment.CenterEnd)) {
                                 if (settingExpanded){
@@ -247,7 +254,10 @@ fun Bible(modifier: Modifier = Modifier) {
                                         contentDescription = "Switch FontFamily between Serif and SansSerif",
                                         modifier = modifier
                                             .size(BIBLE_VIEW_ICON.dp)
-                                           .clickable { bibleState = bibleState.copy(isFontFamilySerif = !bibleState.isFontFamilySerif) },
+                                            .clickable {
+                                                bibleState =
+                                                    bibleState.copy(isFontFamilySerif = !bibleState.isFontFamilySerif)
+                                            },
                                         tint = MaterialTheme.colorScheme.secondary
                                     )
 
@@ -258,7 +268,10 @@ fun Bible(modifier: Modifier = Modifier) {
                                         contentDescription = "Narrower space between verses",
                                         modifier = modifier
                                             .size(BIBLE_VIEW_ICON.dp)
-                                            .clickable { if(bibleState.spaceBetweenVerses != 1) bibleState = bibleState.narrowerSpaceBetweenVerses() },
+                                            .clickable {
+                                                if (bibleState.spaceBetweenVerses != 1) bibleState =
+                                                    bibleState.narrowerSpaceBetweenVerses()
+                                            },
                                         tint = MaterialTheme.colorScheme.secondary
                                     )
 
@@ -269,7 +282,10 @@ fun Bible(modifier: Modifier = Modifier) {
                                         contentDescription = "Wider space between verses",
                                         modifier = modifier
                                             .size(BIBLE_VIEW_ICON.dp)
-                                            .clickable { if(bibleState.spaceBetweenVerses != 50) bibleState = bibleState.widerSpaceBetweenVerses() },
+                                            .clickable {
+                                                if (bibleState.spaceBetweenVerses != 50) bibleState =
+                                                    bibleState.widerSpaceBetweenVerses()
+                                            },
                                         tint = MaterialTheme.colorScheme.secondary
                                     )
 
@@ -324,7 +340,7 @@ fun Bible(modifier: Modifier = Modifier) {
         content = {
             Box(
                 modifier = modifier
-                    .absolutePadding(left = 0.dp, top = (BUTTON_SIZE + 30).dp, right = 0.dp, 0.dp)
+                    .absolutePadding(left = 0.dp, top = (BUTTON_SIZE + 15).dp, right = 0.dp, 0.dp)
                     .pointerInput(Unit) {
                         awaitEachGesture {
                             awaitFirstDown()
@@ -524,9 +540,10 @@ fun SingleBible(bibleState: BibleState){
     Column(
         modifier = Modifier
             .absolutePadding(
-                top = (BUTTON_SIZE + BUTTON_PADDING).dp,
+                top = (BUTTON_SIZE + BUTTON_PADDING * 2).dp,
                 bottom = (BUTTON_SIZE + BUTTON_PADDING).dp
             )
+            .offset(y = (-BUTTON_PADDING).dp)
             .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
             .verticalScroll(rememberScrollState())
     ) {
@@ -621,9 +638,10 @@ fun BilingualSideBible(bibleState: BibleState) {
     Column(
         modifier = Modifier
             .absolutePadding(
-                top = (BUTTON_SIZE + BUTTON_PADDING).dp,
+                top = (BUTTON_SIZE + BUTTON_PADDING * 2).dp,
                 bottom = (BUTTON_SIZE + BUTTON_PADDING).dp
             )
+            .offset(y = (-BUTTON_PADDING).dp)
             .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
             .verticalScroll(rememberScrollState())
     ) {
@@ -672,9 +690,10 @@ fun BilingualUnderBible(bibleState: BibleState) {
     Column(
         modifier = Modifier
             .absolutePadding(
-                top = (BUTTON_SIZE + BUTTON_PADDING).dp,
+                top = (BUTTON_SIZE + BUTTON_PADDING * 2).dp,
                 bottom = (BUTTON_SIZE + BUTTON_PADDING).dp
             )
+            .offset(y = (-BUTTON_PADDING).dp)
             .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
             .verticalScroll(rememberScrollState())
     ) {

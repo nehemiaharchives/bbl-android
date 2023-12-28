@@ -41,6 +41,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -55,8 +56,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -72,7 +71,6 @@ import org.gnit.bible.ui.widgets.DROPDOWN_MENU_ITEM_LEFT_PADDING
 import org.gnit.bible.ui.widgets.DROPDOWN_MENU_ITEM_RIGHT_PADDING
 import org.gnit.bible.ui.widgets.DROPDOWN_MENU_WIDTH
 import org.gnit.bible.ui.widgets.TranslationDropDownMenuItem
-import org.gnit.bible.ui.widgets.jaSerifFontFamily
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.Locale
@@ -536,6 +534,7 @@ fun SingleBible(bibleState: BibleState){
     }
 
     val verses = splitChapterToVerses(chapterText)
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
@@ -545,7 +544,7 @@ fun SingleBible(bibleState: BibleState){
             )
             .offset(y = (-BUTTON_PADDING).dp)
             .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
     ) {
         verses.forEachIndexed{ verse, text ->
 
@@ -560,6 +559,12 @@ fun SingleBible(bibleState: BibleState){
                     .fillMaxWidth()
             )
         }
+    }
+    LaunchedEffect(bibleState.book) {
+        scrollState.scrollTo(0)
+    }
+    LaunchedEffect(bibleState.chapter) {
+        scrollState.scrollTo(0)
     }
 }
 
@@ -634,6 +639,7 @@ fun BilingualSideBible(bibleState: BibleState) {
     if (bibleState.subTranslation == null) throw IllegalArgumentException("ReadingMode should be ${ReadingMode.BILINGUAL_SIDE} so subTranslation is needed but null")
 
     val versePairs = getVersePairs(bibleState)
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
@@ -643,7 +649,7 @@ fun BilingualSideBible(bibleState: BibleState) {
             )
             .offset(y = (-BUTTON_PADDING).dp)
             .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
     ) {
         versePairs.forEachIndexed { verse, pair ->
 
@@ -667,6 +673,12 @@ fun BilingualSideBible(bibleState: BibleState) {
             }
         }
     }
+    LaunchedEffect(bibleState.book) {
+        scrollState.scrollTo(0)
+    }
+    LaunchedEffect(bibleState.chapter) {
+        scrollState.scrollTo(0)
+    }
 }
 
 val sideView = BibleState(Translation.jc, Translation.webus, ReadingMode.BILINGUAL_SIDE)
@@ -686,6 +698,7 @@ fun BilingualUnderBible(bibleState: BibleState) {
     if (bibleState.subTranslation == null) throw IllegalArgumentException("ReadingMode should be ${ReadingMode.BILINGUAL_UNDER} so subTranslation is needed but null")
 
     val versePairs = getVersePairs(bibleState)
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
@@ -695,7 +708,7 @@ fun BilingualUnderBible(bibleState: BibleState) {
             )
             .offset(y = (-BUTTON_PADDING).dp)
             .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
     ) {
         versePairs.forEachIndexed { verse, pair ->
 
@@ -714,7 +727,12 @@ fun BilingualUnderBible(bibleState: BibleState) {
             }
         }
     }
-
+    LaunchedEffect(bibleState.book) {
+        scrollState.scrollTo(0)
+    }
+    LaunchedEffect(bibleState.chapter) {
+        scrollState.scrollTo(0)
+    }
 }
 
 val downView = BibleState(Translation.jc, Translation.webus, ReadingMode.BILINGUAL_UNDER)

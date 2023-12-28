@@ -1,6 +1,7 @@
 package org.gnit.bible
 
 import android.util.SparseArray
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.gnit.bible.lib.SparseArraySerializer
 import org.junit.Test

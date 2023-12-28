@@ -6,9 +6,11 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
 
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import org.gnit.bible.Translation
 
 object SparseArraySerializer : KSerializer<SparseArray<String>>{
     private val mapSerializer = MapSerializer(Int.serializer(), String.serializer())
@@ -36,5 +38,19 @@ object SparseArraySerializer : KSerializer<SparseArray<String>>{
         }
 
         return array
+    }
+}
+
+object TranslationSerializer: KSerializer<Translation>{
+
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Translation", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: Translation) {
+        encoder.encodeString(value.name)
+    }
+
+    override fun deserialize(decoder: Decoder): Translation {
+        val value = decoder.decodeString()
+        return Translation.valueOf(value)
     }
 }

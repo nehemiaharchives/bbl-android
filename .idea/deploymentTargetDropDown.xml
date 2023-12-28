@@ -24,10 +24,23 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="testGetBooksFromTranslation()">
-        <State />
+      <entry key="bibleStateSerializeTest()">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\joel\.android\avd\Pixel_7_API_29.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2023-12-28T11:18:46.949395500Z" />
+        </State>
       </entry>
-      <entry key="testSparseArraySerializer() (1)">
+      <entry key="testGetBooksFromTranslation()">
         <State />
       </entry>
     </value>

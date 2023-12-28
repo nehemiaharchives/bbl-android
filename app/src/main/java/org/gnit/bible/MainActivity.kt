@@ -1,6 +1,8 @@
 package org.gnit.bible
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -41,7 +43,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +58,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -61,7 +66,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.ConfigurationCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.LifecycleStartEffect
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.gnit.bible.ui.theme.BibleTheme
 import org.gnit.bible.ui.widgets.BIBLE_VIEW_ICON
 import org.gnit.bible.ui.widgets.BIBLE_VIEW_ICON_SPACER
@@ -76,6 +88,7 @@ import java.io.InputStreamReader
 import java.util.Locale
 import kotlin.math.roundToInt
 
+@Serializable
 @Parcelize
 data class BibleState(
     val mainTranslation: Translation = Translation.webus,
@@ -105,25 +118,37 @@ data class BibleState(
     fun widerSpaceBetweenVerses() = copy(spaceBetweenVerses = spaceBetweenVerses + 1)
 }
 
+const val SHARED_PREFERENCE_NAME = "Bible"
+const val SHARED_PREFERENCE_KEY_BIBLE_STATE = "bible_state"
+
 @Composable
 fun rememberBibleState(): BibleState {
 
-    val configuration = LocalConfiguration.current
-    val defaultLocale = ConfigurationCompat.getLocales(configuration)[0]?: Locale.ENGLISH
-    val defaultLanguage = defaultLocale.language
-    Log.d("rememberBibleSate", "default language is $defaultLanguage")
+    val json = Json { encodeDefaults = true }
 
-    val listOfLanguages = getAvailableTranslations().map { it.language }
-    val bibleLanguage = listOfLanguages.firstOrNull { language -> language.toString() == defaultLanguage }?: Language.en
-    Log.d("rememberBibleSate", "bibleLanguage is determined to $bibleLanguage")
+    lateinit var initialBibleState: BibleState
 
-    val initialMainTranslation = bibleLanguage.defaultTranslation()
+    val sharedPreferences = LocalContext.current.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+    val storedPreferences = sharedPreferences.getString(SHARED_PREFERENCE_KEY_BIBLE_STATE, null)
+    if (storedPreferences != null){
+        initialBibleState = json.decodeFromString<BibleState>(storedPreferences)
+        Log.d("Bible Lifecycle", "sharedPreferences had initialBibleState: $initialBibleState")
+    } else {
+        val configuration = LocalConfiguration.current
+        val defaultLocale = ConfigurationCompat.getLocales(configuration)[0]?: Locale.ENGLISH
+        val defaultLanguage = defaultLocale.language
+        Log.d("rememberBibleSate", "default language is $defaultLanguage")
 
-    return rememberSaveable {
-        BibleState(mainTranslation = initialMainTranslation)
-        //sideView
-        //downView
+        val listOfLanguages = getAvailableTranslations().map { it.language }
+        val bibleLanguage = listOfLanguages.firstOrNull { language -> language.toString() == defaultLanguage }?: Language.en
+        Log.d("rememberBibleSate", "bibleLanguage is determined to $bibleLanguage")
+
+        val initialMainTranslation = bibleLanguage.defaultTranslation()
+        initialBibleState = BibleState(mainTranslation = initialMainTranslation)
+        Log.d("Bible Lifecycle", "sharedPreferences was null, computed initialBibleState: $initialBibleState")
     }
+
+    return initialBibleState
 }
 
 class MainActivity : ComponentActivity() {
@@ -131,8 +156,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val debugTag = MainActivity::class.simpleName
-        Log.d(debugTag, "onCreate() called")
+        Log.d("Bible Lifecycle", "here is on create")
 
         setContent {
             BibleTheme {
@@ -163,8 +187,22 @@ fun Bible(modifier: Modifier = Modifier) {
 
     val initialBibleState = rememberBibleState()
     var bibleState by rememberSaveable { mutableStateOf(initialBibleState) }
+
+    Log.d("Bible Lifecycle", "by rememberSaveable { mutableStateOf(initialBibleState) } called, bibleState:$bibleState")
+
     var bibleTitle by rememberSaveable { mutableStateOf(bibleState.describeBookChapter()) }
     var zoom by remember { mutableFloatStateOf(bibleState.fontSize.toFloat()) }
+
+    val sharedPreferences = LocalContext.current.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LifecycleResumeEffect(lifecycleOwner){
+        onPauseOrDispose {
+            Log.d("Bible Lifecycle", "here is on pause, saving bibleState: $bibleState")
+            val json = Json { encodeDefaults = true }
+            val bibleStateString = json.encodeToString(bibleState)
+            sharedPreferences.edit().putString(SHARED_PREFERENCE_KEY_BIBLE_STATE, bibleStateString).apply()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -347,19 +385,22 @@ fun Bible(modifier: Modifier = Modifier) {
                                 val oldZoom = zoom
 
                                 if (5f < zoom && zoom < 400f) {
+
                                     zoom *= event.calculateZoom()
 
-                                    Log.d(
-                                        "Scaffold.content Box",
-                                        "zoom event detected. oldZoom:$oldZoom, new zoom = $zoom"
-                                    )
-                                    val intZoomValue = zoom.roundToInt()
-                                    if (bibleState.fontSize != intZoomValue) {
-                                        bibleState = bibleState.copy(fontSize = intZoomValue)
+                                    if(oldZoom != zoom){
                                         Log.d(
                                             "Scaffold.content Box",
-                                            "fontSize changed $bibleState"
+                                            "zoom event detected. oldZoom:$oldZoom, new zoom = $zoom"
                                         )
+                                        val intZoomValue = zoom.roundToInt()
+                                        if (bibleState.fontSize != intZoomValue) {
+                                            bibleState = bibleState.copy(fontSize = intZoomValue)
+                                            Log.d(
+                                                "Scaffold.content Box",
+                                                "fontSize changed $bibleState"
+                                            )
+                                        }
                                     }
 
                                 } else if (zoom > 400f) {

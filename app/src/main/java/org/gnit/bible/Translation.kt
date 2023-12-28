@@ -1,6 +1,8 @@
 package org.gnit.bible
 
 import android.util.SparseArray
+import kotlinx.serialization.Serializable
+import org.gnit.bible.lib.TranslationSerializer
 import org.gnit.bible.ui.widgets.enSansFontFamily
 import org.gnit.bible.ui.widgets.enSerifFontFamily
 import org.gnit.bible.ui.widgets.jaSansFontFamily
@@ -45,6 +47,7 @@ enum class Language {
     }
 }
 
+@Serializable(with = TranslationSerializer::class)
 enum class Translation(val language: Language, val year: Int, val books: SparseArray<String>, val nativeName: String) {
     // English World
     webus(Language.en, 2000, Books.ENGLISH_NUMBER_NAME_MAP, "World English Bible"), // webus 206 english

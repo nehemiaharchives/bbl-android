@@ -8,6 +8,7 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -577,16 +578,7 @@ fun SingleBible(bibleState: BibleState){
     val verses = splitChapterToVerses(chapterText)
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .absolutePadding(
-                top = (BUTTON_SIZE + BUTTON_PADDING * 2).dp,
-                bottom = (BUTTON_SIZE + BUTTON_PADDING).dp
-            )
-            .offset(y = (-BUTTON_PADDING).dp)
-            .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
-            .verticalScroll(scrollState)
-    ) {
+    ScrollableColumn(bibleState, scrollState) {
         verses.forEachIndexed{ verse, text ->
 
             val background = if(bibleState.isZebraBackground && verse.isEven()) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
@@ -600,12 +592,6 @@ fun SingleBible(bibleState: BibleState){
                     .fillMaxWidth()
             )
         }
-    }
-    LaunchedEffect(bibleState.book) {
-        scrollState.scrollTo(0)
-    }
-    LaunchedEffect(bibleState.chapter) {
-        scrollState.scrollTo(0)
     }
 }
 
@@ -682,16 +668,7 @@ fun BilingualSideBible(bibleState: BibleState) {
     val versePairs = getVersePairs(bibleState)
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .absolutePadding(
-                top = (BUTTON_SIZE + BUTTON_PADDING * 2).dp,
-                bottom = (BUTTON_SIZE + BUTTON_PADDING).dp
-            )
-            .offset(y = (-BUTTON_PADDING).dp)
-            .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
-            .verticalScroll(scrollState)
-    ) {
+    ScrollableColumn(bibleState, scrollState) {
         versePairs.forEachIndexed { verse, pair ->
 
             val background = if(bibleState.isZebraBackground && verse.isEven()) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
@@ -714,12 +691,6 @@ fun BilingualSideBible(bibleState: BibleState) {
             }
         }
     }
-    LaunchedEffect(bibleState.book) {
-        scrollState.scrollTo(0)
-    }
-    LaunchedEffect(bibleState.chapter) {
-        scrollState.scrollTo(0)
-    }
 }
 
 val sideView = BibleState(Translation.jc, Translation.webus, ReadingMode.BILINGUAL_SIDE)
@@ -741,16 +712,7 @@ fun BilingualUnderBible(bibleState: BibleState) {
     val versePairs = getVersePairs(bibleState)
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .absolutePadding(
-                top = (BUTTON_SIZE + BUTTON_PADDING * 2).dp,
-                bottom = (BUTTON_SIZE + BUTTON_PADDING).dp
-            )
-            .offset(y = (-BUTTON_PADDING).dp)
-            .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
-            .verticalScroll(scrollState)
-    ) {
+    ScrollableColumn(bibleState, scrollState) {
         versePairs.forEachIndexed { verse, pair ->
 
             val background = if(bibleState.isZebraBackground && verse.isEven()) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
@@ -768,12 +730,6 @@ fun BilingualUnderBible(bibleState: BibleState) {
             }
         }
     }
-    LaunchedEffect(bibleState.book) {
-        scrollState.scrollTo(0)
-    }
-    LaunchedEffect(bibleState.chapter) {
-        scrollState.scrollTo(0)
-    }
 }
 
 val downView = BibleState(Translation.jc, Translation.webus, ReadingMode.BILINGUAL_UNDER)
@@ -783,6 +739,31 @@ val downView = BibleState(Translation.jc, Translation.webus, ReadingMode.BILINGU
 fun BilingualUnderBiblePreview(){
     BibleTheme {
         BilingualUnderBible(bibleState = downView)
+    }
+}
+
+@Composable
+fun ScrollableColumn(
+    bibleState: BibleState,
+    scrollState: ScrollState,
+    content: @Composable () -> Unit
+) {
+    Column(
+        modifier = Modifier.absolutePadding(
+            top = (BUTTON_SIZE + BUTTON_PADDING * 2).dp,
+            bottom = (BUTTON_SIZE + BUTTON_PADDING).dp
+        )
+            .offset(y = (-BUTTON_PADDING).dp)
+            .fillMaxHeight(VERSES_COLUMN_FILL_MAX_HEIGHT)
+            .verticalScroll(scrollState)
+    ){
+        content()
+    }
+    LaunchedEffect(bibleState.book) {
+        scrollState.scrollTo(0)
+    }
+    LaunchedEffect(bibleState.chapter) {
+        scrollState.scrollTo(0)
     }
 }
 

@@ -66,7 +66,7 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     lsg(Language.fr, 1910, Books.FRENCH_NUMBER_NAME_MAP, "Louis Segond Bible", 6),  // lsg,          French
     sinod(Language.ru, 1876, Books.RUSSIAN_NUMBER_NAME_MAP, "Синодальный перевод", 7), // СИНОД(sinod), Russian
     svrj(Language.nl, 1888, Books.DUTCH_NUMBER_NAME_MAP, "Statenvertaling Jongbloed-editie", 8), // SV-RJ(svrj),  Dutch
-    rdv24(Language.it, 1924, SparseArray(0)/* TODO implement */, "Revised Diodati Version", 9), // rdv24,        Italian,
+    rdv24(Language.it, 1924, Books.ITALIAN_NUMBER_NAME_MAP, "Versione Diodati Riveduta", 9), // rdv24,        Italian,
 
     // Spain  already included in Spanish above
     ubg(Language.pl, 2017, SparseArray(0)/* TODO implement */, "Uwspółcześniona Biblia gdańska", 10), // ubg,          Polish

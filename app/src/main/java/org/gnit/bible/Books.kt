@@ -566,6 +566,82 @@ object Books {
             return map
         }
 
+    val ITALIAN_NUMBER_NAME_MAP = italianBooks
+    private val italianBooks: SparseArray<String>
+        get() {
+            val map = SparseArray<String>(67)
+
+            map.put(1, "GENESI")
+            map.put(2, "ESODO")
+            map.put(3, "LEVITICO")
+            map.put(4, "NUMERI")
+            map.put(5, "DEUTERONOMIO")
+            map.put(6, "GIOSUÈ")
+            map.put(7, "GIUDICI")
+            map.put(8, "RUTH")
+            map.put(9, "I SAMUELE")
+            map.put(10, "II SAMUELE")
+            map.put(11, "I RE")
+            map.put(12, "II RE")
+            map.put(13, "I CRONACHE")
+            map.put(14, "II CRONACHE")
+            map.put(15, "ESDRA")
+            map.put(16, "NEHEMIA")
+            map.put(17, "ESTER")
+            map.put(18, "GIOBBE")
+            map.put(19, "SALMI")
+            map.put(20, "PROVERBI")
+            map.put(21, "ECCLESIASTE")
+            map.put(22, "CANTICO DE'~CANTICI")
+            map.put(23, "ISAIA")
+            map.put(24, "GEREMIA")
+            map.put(25, "LAMENTAZIONI")
+            map.put(26, "EZECHIELE")
+            map.put(27, "DANIELE")
+            map.put(28, "OSEA")
+            map.put(29, "GIOELE")
+            map.put(30, "AMOS")
+            map.put(31, "ABDIA")
+            map.put(32, "GIONA")
+            map.put(33, "MICHEA")
+            map.put(34, "NAHUM")
+            map.put(35, "HABACUC")
+            map.put(36, "SOFONIA")
+            map.put(37, "AGGEO")
+            map.put(38, "ZACCARIA")
+            map.put(39, "MALACHIA")
+            map.put(40, "Matteo")
+            map.put(41, "Marco")
+            map.put(42, "Luca")
+            map.put(43, "Giovanni")
+            map.put(44, "ATTI DEGLI APOSTOLI")
+            map.put(45, "EPISTOLE DI S. PAOLO AI~ROMANI")
+            map.put(46, "I Corinzi")
+            map.put(47, "II Corinzi")
+            map.put(48, "EPISTOLE DI S. PAOLO AI GALATI")
+            map.put(49, "EPISTOLE DI S. PAOLO AGLI EFESINI")
+            map.put(50, "EPISTOLE DI S. PAOLO AI FILIPPESI")
+            map.put(51, "EPISTOLE DI S. PAOLO AI COLOSSESI")
+            map.put(52, "EPISTOLE DI S. PAOLO I AI TESSALONICESI")
+            map.put(53, "EPISTOLE DI S. PAOLO II AI TESSALONICESI")
+            map.put(54, "EPISTOLE DI S. PAOLO I A TIMOTEO")
+            map.put(55, "EPISTOLE DI S. PAOLO II A TIMOTEO")
+            map.put(56, "EPISTOLE DI S. PAOLO A TITO")
+            map.put(57, "EPISTOLE DI S. PAOLO A FILEMONE")
+            map.put(58, "EPISTOLA AGLI EBREI")
+            map.put(59, "EPISTOLA DI S. GIACOMO")
+            map.put(60, "EPISTOLA I DI S. PIETRO")
+            map.put(61, "EPISTOLA II DI S. PIETRO")
+            map.put(62, "EPISTOLA I DI S. GIOVANNI")
+            map.put(63, "EPISTOLA II DI S. GIOVANNI")
+            map.put(64, "EPISTOLA III DI S. GIOVANNI")
+            map.put(65, "EPISTOLA DI S. GIUDA")
+            map.put(66, "APOCALISSE")
+
+            return map
+        }
+
+
     val CHINESE_NUMBER_NAME_MAP = chineseBooks
     private val chineseBooks: SparseArray<String>
         get() {

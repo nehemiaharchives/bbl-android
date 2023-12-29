@@ -99,7 +99,7 @@ data class BibleState(
     val chapter: Int = 1,
     val fontSize: Int = 16,
     val isZebraBackground: Boolean = false,
-    val spaceBetweenVerses: Int = 1,
+    val spaceBetweenVerses: Int = SPACE_BETWEEN_VERSES_MIN,
     val isFontFamilySerif: Boolean = true
 ): Parcelable{
     fun prevBook() = copy(book = book - 1, chapter = 1)
@@ -118,6 +118,9 @@ data class BibleState(
     fun narrowerSpaceBetweenVerses() = copy(spaceBetweenVerses = spaceBetweenVerses -1)
     fun widerSpaceBetweenVerses() = copy(spaceBetweenVerses = spaceBetweenVerses + 1)
 }
+
+const val SPACE_BETWEEN_VERSES_MIN = 5
+const val SPACE_BETWEEN_VERSES_MAX = 50
 
 const val SHARED_PREFERENCE_NAME = "Bible"
 const val SHARED_PREFERENCE_KEY_BIBLE_STATE = "bible_state"
@@ -306,7 +309,7 @@ fun Bible(modifier: Modifier = Modifier) {
                                         modifier = modifier
                                             .size(BIBLE_VIEW_ICON.dp)
                                             .clickable {
-                                                if (bibleState.spaceBetweenVerses != 1) bibleState =
+                                                if (bibleState.spaceBetweenVerses != SPACE_BETWEEN_VERSES_MIN) bibleState =
                                                     bibleState.narrowerSpaceBetweenVerses()
                                             },
                                         tint = MaterialTheme.colorScheme.secondary
@@ -320,7 +323,7 @@ fun Bible(modifier: Modifier = Modifier) {
                                         modifier = modifier
                                             .size(BIBLE_VIEW_ICON.dp)
                                             .clickable {
-                                                if (bibleState.spaceBetweenVerses != 50) bibleState =
+                                                if (bibleState.spaceBetweenVerses != SPACE_BETWEEN_VERSES_MAX) bibleState =
                                                     bibleState.widerSpaceBetweenVerses()
                                             },
                                         tint = MaterialTheme.colorScheme.secondary
@@ -565,6 +568,9 @@ fun Int.isEven() = this % 2 == 0
 
 @Composable
 fun SingleBible(bibleState: BibleState){
+
+    Log.d("SingleBible", "bibleState: $bibleState")
+
     val translation = bibleState.mainTranslation
     val book = bibleState.book
     val chapter = bibleState.chapter

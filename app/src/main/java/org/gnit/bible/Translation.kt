@@ -52,31 +52,31 @@ enum class Language {
 @Serializable(with = TranslationSerializer::class)
 enum class Translation(val language: Language, val year: Int, val books: SparseArray<String>, val nativeName: String, val defaultSortOrder: Int) {
     // English World
-    webus(Language.en, 2000, Books.ENGLISH_NUMBER_NAME_MAP, "World English Bible", 1), // webus 206 english
-    kjv(Language.en, 1611, Books.ENGLISH_NUMBER_NAME_MAP, "King James Version", 2),
+    webus(Language.en, 2000, Books.ENGLISH_NUMBER_NAME_MAP, "World English Bible", 1), // English
+    kjv(Language.en, 1611, Books.ENGLISH_NUMBER_NAME_MAP, "King James Version", 2), // English
 
     // Latin America
-    rvr09(Language.es, 1909, Books.SPANISH_NUMBER_NAME_MAP, "Reina Valera", 3), // rvr09,        Spanish
-    tb(Language.pt, 1917, Books.PORTUGUESE_NUMBER_NAME_MAP, "Tradução Brasileira", 4),    // tb,           Portuguese
+    rvr09(Language.es, 1909, Books.SPANISH_NUMBER_NAME_MAP, "Reina Valera", 3), // Spanish
+    tb(Language.pt, 1917, Books.PORTUGUESE_NUMBER_NAME_MAP, "Tradução Brasileira", 4), // Portuguese
 
     // Europe
-    delut(Language.de, 1912, Books.GERMAN_NUMBER_NAME_MAP, "Lutherbibel", 5), // delut,        German
+    delut(Language.de, 1912, Books.GERMAN_NUMBER_NAME_MAP, "Lutherbibel", 5), // German
 
     // UK already included in English above
-    lsg(Language.fr, 1910, Books.FRENCH_NUMBER_NAME_MAP, "Louis Segond Bible", 6),  // lsg,          French
-    sinod(Language.ru, 1876, Books.RUSSIAN_NUMBER_NAME_MAP, "Синодальный перевод", 7), // СИНОД(sinod), Russian
-    svrj(Language.nl, 1888, Books.DUTCH_NUMBER_NAME_MAP, "Statenvertaling Jongbloed-editie", 8), // SV-RJ(svrj),  Dutch
-    rdv24(Language.it, 1924, Books.ITALIAN_NUMBER_NAME_MAP, "Versione Diodati Riveduta", 9), // rdv24,        Italian,
+    lsg(Language.fr, 1910, Books.FRENCH_NUMBER_NAME_MAP, "Louis Segond Bible", 6), //French
+    sinod(Language.ru, 1876, Books.RUSSIAN_NUMBER_NAME_MAP, "Синодальный перевод", 7), //Russian
+    svrj(Language.nl, 1888, Books.DUTCH_NUMBER_NAME_MAP, "Statenvertaling Jongbloed-editie", 8), //Dutch
+    rdv24(Language.it, 1924, Books.ITALIAN_NUMBER_NAME_MAP, "Versione Diodati Riveduta", 9), //Italian,
 
     // Spain  already included in Spanish above
-    ubg(Language.pl, 2017, SparseArray(0)/* TODO implement */, "Uwspółcześniona Biblia gdańska", 10), // ubg,          Polish
-    ubio(Language.uk, 1962, SparseArray(0)/* TODO implement */, "Біблія в пер. Івана Огієнка", 11), // ubio,         Ukrainian
-    sven(Language.sv, 1917, SparseArray(0)/* TODO implement */, "1917 års kyrkobibel", 12), // sven,         swedish
+    ubg(Language.pl, 2017, Books.POLISH_NUMBER_NAME_MAP, "Uwspółcześniona Biblia gdańska", 10), //Polish
+    ubio(Language.uk, 1962, SparseArray(0)/* TODO implement */, "Біблія в пер. Івана Огієнка", 11), //Ukrainian
+    sven(Language.sv, 1917, SparseArray(0)/* TODO implement */, "1917 års kyrkobibel", 12), //Swedish
 
     // North East Asia
     cunp(Language.zh, 1919, Books.CHINESE_NUMBER_NAME_MAP, "和合本", 13),// cunp, Chinese, Chinese Union Version with New Punctuation
     krv(Language.ko, 1961, Books.KOREAN_NUMBER_NAME_MAP, "개역한글", 14),// krv, Korean, Korean Revised Version
-    jc(Language.ja, 1955, Books.JAPANESE_JC_NUMBER_NAME_MAP, "口語訳", 15);// jc, Japanese, Japanese, Colloquial Japanese
+    jc(Language.ja, 1955, Books.JAPANESE_JC_NUMBER_NAME_MAP, "口語訳", 15);// jc, Japanese, Colloquial Japanese
 
     fun shortName() = when(this){
         webus -> "WEB"

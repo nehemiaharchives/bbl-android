@@ -2,7 +2,6 @@ package org.gnit.bible
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -44,15 +43,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -67,10 +65,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.ConfigurationCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import androidx.lifecycle.compose.LifecycleStartEffect
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -98,6 +96,7 @@ data class BibleState(
     val book: Int = 1,
     val chapter: Int = 1,
     val fontSize: Int = 16,
+    val scrollPercent: Float = 0f,
     val isZebraBackground: Boolean = false,
     val spaceBetweenVerses: Int = SPACE_BETWEEN_VERSES_MIN,
     val isFontFamilySerif: Boolean = true
@@ -117,7 +116,12 @@ data class BibleState(
     fun isUnderMainOrSub(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_UNDER && (mainTranslation == translationToCompare || subTranslation == translationToCompare))
     fun narrowerSpaceBetweenVerses() = copy(spaceBetweenVerses = spaceBetweenVerses -1)
     fun widerSpaceBetweenVerses() = copy(spaceBetweenVerses = spaceBetweenVerses + 1)
+
+    companion object { val json = Json { encodeDefaults = true }}
+    fun toJson() = json.encodeToString(this)
 }
+
+fun String.toBibleState() = BibleState.json.decodeFromString<BibleState>(this)
 
 const val SPACE_BETWEEN_VERSES_MIN = 5
 const val SPACE_BETWEEN_VERSES_MAX = 50
@@ -125,17 +129,19 @@ const val SPACE_BETWEEN_VERSES_MAX = 50
 const val SHARED_PREFERENCE_NAME = "Bible"
 const val SHARED_PREFERENCE_KEY_BIBLE_STATE = "bible_state"
 
+
+
 @Composable
 fun rememberBibleState(): BibleState {
 
-    val json = Json { encodeDefaults = true }
+
 
     lateinit var initialBibleState: BibleState
 
     val sharedPreferences = LocalContext.current.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-    val storedPreferences = sharedPreferences.getString(SHARED_PREFERENCE_KEY_BIBLE_STATE, null)
-    if (storedPreferences != null){
-        initialBibleState = json.decodeFromString<BibleState>(storedPreferences)
+    val bibleStateJson = sharedPreferences.getString(SHARED_PREFERENCE_KEY_BIBLE_STATE, null)
+    if (bibleStateJson != null){
+        initialBibleState = bibleStateJson.toBibleState()
         Log.d("Bible Lifecycle", "sharedPreferences had initialBibleState: $initialBibleState")
     } else {
         val configuration = LocalConfiguration.current
@@ -202,9 +208,7 @@ fun Bible(modifier: Modifier = Modifier) {
     LifecycleResumeEffect(lifecycleOwner){
         onPauseOrDispose {
             Log.d("Bible Lifecycle", "here is on pause, saving bibleState: $bibleState")
-            val json = Json { encodeDefaults = true }
-            val bibleStateString = json.encodeToString(bibleState)
-            sharedPreferences.edit().putString(SHARED_PREFERENCE_KEY_BIBLE_STATE, bibleStateString).apply()
+            sharedPreferences.edit().putString(SHARED_PREFERENCE_KEY_BIBLE_STATE, bibleState.toJson()).apply()
         }
     }
 
@@ -771,6 +775,37 @@ fun ScrollableColumn(
     LaunchedEffect(bibleState.chapter) {
         scrollState.scrollTo(0)
     }
+
+    LaunchedEffect(bibleState.readingMode){
+        val scrollValue = (scrollState.maxValue * bibleState.scrollPercent).toInt()
+        scrollState.scrollTo(scrollValue)
+    }
+
+    val sharedPreferences = LocalContext.current.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+    LaunchedEffect(scrollState){
+        val lastScrollValue = scrollState.value
+        var pendingSaveJob: Job? = null
+
+        snapshotFlow { scrollState.value }
+            .collect{ newValue ->
+                if(newValue != lastScrollValue) {
+                    pendingSaveJob?.cancel()
+                    pendingSaveJob = launch {
+                        delay(200)
+                        if (!scrollState.isScrollInProgress){
+                            val scrollPercent = computeScrollPercent(newValue, scrollState)
+                            sharedPreferences.edit().putString(SHARED_PREFERENCE_KEY_BIBLE_STATE, bibleState.copy(scrollPercent = scrollPercent).toJson()).apply()
+                            Log.d("ScrollableColumn", "Saved scroll scrollPercent: $scrollPercent")
+                        }
+                    }
+                }
+            }
+    }
+}
+
+private fun computeScrollPercent(scrollValue: Int, scrollState: ScrollState): Float {
+    val totalScrollableHeight = scrollState.maxValue
+    return scrollValue.toFloat() / totalScrollableHeight
 }
 
 @Composable

@@ -63,7 +63,7 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     delut(Language.de, 1912, Books.GERMAN_NUMBER_NAME_MAP, "Lutherbibel", 5), // delut,        German
 
     // UK already included in English above
-    lsg(Language.fr, 1910, SparseArray(0)/* TODO implement */, "Louis Segond Bible", 6),  // lsg,          French
+    lsg(Language.fr, 1910, Books.FRENCH_NUMBER_NAME_MAP, "Louis Segond Bible", 6),  // lsg,          French
     sinod(Language.ru, 1876, SparseArray(0)/* TODO implement */, "Синодальный перевод", 7), // СИНОД(sinod), Russian
     svrj(Language.nl, 1888, SparseArray(0)/* TODO implement */, "Statenvertaling Jongbloed-editie", 8), // SV-RJ(svrj),  Dutch
     rdv24(Language.it, 1924, SparseArray(0)/* TODO implement */, "Revised Diodati Version", 9), // rdv24,        Italian,

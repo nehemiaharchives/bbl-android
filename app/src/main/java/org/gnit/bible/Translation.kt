@@ -57,7 +57,7 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
 
     // Latin America
     rvr09(Language.es, 1909, Books.SPANISH_NUMBER_NAME_MAP, "Reina Valera", 3), // rvr09,        Spanish
-    tb(Language.pt, 1917, SparseArray(0)/* TODO implement */, "Tradução Brasileira", 4),    // tb,           Portuguese
+    tb(Language.pt, 1917, Books.PORTUGUESE_NUMBER_NAME_MAP, "Tradução Brasileira", 4),    // tb,           Portuguese
 
     // Europe
     delut(Language.de, 1912, SparseArray(0)/* TODO implement */, "Lutherbibel", 5), // delut,        German

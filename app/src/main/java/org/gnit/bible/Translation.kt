@@ -15,7 +15,7 @@ import org.gnit.bible.ui.widgets.scSansFontFamily
 import org.gnit.bible.ui.widgets.scSerifFontFamily
 
 enum class Language {
-    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja;
+    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja, vi;
 
     fun defaultTranslation() = when(this){
         en -> Translation.webus
@@ -32,17 +32,18 @@ enum class Language {
         zh -> Translation.cunp
         ko -> Translation.krv
         ja -> Translation.jc
+        vi -> Translation.kttv
     }
 
     fun serifFontFamily() = when(this){
-        en, es, pt, de, fr, ru, nl, it, pl, uk, sv -> enSerifFontFamily
+        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi -> enSerifFontFamily
         zh -> scSerifFontFamily
         ko -> koSerifFontFamily
         ja -> jaSerifFontFamily
     }
 
     fun sansFontFamily() = when(this){
-        en, es, pt, de, fr, ru, nl, it, pl, uk, sv -> enSansFontFamily
+        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi -> enSansFontFamily
         zh -> scSansFontFamily
         ko -> koSansFontFamily
         ja -> jaSansFontFamily
@@ -74,9 +75,13 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     sven(Language.sv, 1917, Books.SWEDISH_NUMBER_NAME_MAP, "1917 års kyrkobibel", 12), //Swedish
 
     // North East Asia
-    cunp(Language.zh, 1919, Books.CHINESE_NUMBER_NAME_MAP, "和合本", 13),// cunp, Chinese, Chinese Union Version with New Punctuation
-    krv(Language.ko, 1961, Books.KOREAN_NUMBER_NAME_MAP, "개역한글", 14),// krv, Korean, Korean Revised Version
-    jc(Language.ja, 1955, Books.JAPANESE_JC_NUMBER_NAME_MAP, "口語訳", 15);// jc, Japanese, Colloquial Japanese
+    cunp(Language.zh, 1919, Books.CHINESE_NUMBER_NAME_MAP, "和合本", 13), // Chinese, Chinese Union Version with New Punctuation
+    krv(Language.ko, 1961, Books.KOREAN_NUMBER_NAME_MAP, "개역한글", 14), // Korean, Korean Revised Version
+    jc(Language.ja, 1955, Books.JAPANESE_JC_NUMBER_NAME_MAP, "口語訳", 15), // Japanese, Colloquial Japanese
+
+    // South East Asia
+    kttv(Language.vi, 1925, Books.VIETNAMESE_NUMBER_NAME_MAP, "Kinh Thánh Tiếng Việt", 16), // Vietnamese
+    ;
 
     fun shortName() = when(this){
         webus -> "WEB"

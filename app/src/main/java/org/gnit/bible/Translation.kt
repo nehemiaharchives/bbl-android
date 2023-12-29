@@ -70,7 +70,7 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
 
     // Spain  already included in Spanish above
     ubg(Language.pl, 2017, Books.POLISH_NUMBER_NAME_MAP, "Uwspółcześniona Biblia gdańska", 10), //Polish
-    ubio(Language.uk, 1962, SparseArray(0)/* TODO implement */, "Біблія в пер. Івана Огієнка", 11), //Ukrainian
+    ubio(Language.uk, 1962, Books.UKRAINIAN_NUMBER_NAME_MAP, "Біблія в пер. Івана Огієнка", 11), //Ukrainian
     sven(Language.sv, 1917, SparseArray(0)/* TODO implement */, "1917 års kyrkobibel", 12), //Swedish
 
     // North East Asia

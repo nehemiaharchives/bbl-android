@@ -149,7 +149,7 @@ fun rememberBibleState(): BibleState {
         val defaultLanguage = defaultLocale.language
         Log.d("rememberBibleSate", "default language is $defaultLanguage")
 
-        val listOfLanguages = getAvailableTranslations().map { it.language }
+        val listOfLanguages = getAssetTranslations().map { it.language }
         val bibleLanguage = listOfLanguages.firstOrNull { language -> language.toString() == defaultLanguage }?: Language.en
         Log.d("rememberBibleSate", "bibleLanguage is determined to $bibleLanguage")
 
@@ -187,8 +187,6 @@ const val BUTTON_SIZE = 35
 const val BUTTON_ROUND = 5
 const val BUTTON_TEXT_FONT_SIZE = 15
 const val BUTTON_CONTENT_PADDING = 0
-
-fun getAvailableTranslations() = Translation.entries.filter { it.isAssets() } //TODO add downloaded translations
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -240,7 +238,7 @@ fun Bible(modifier: Modifier = Modifier) {
                     var settingExpanded by remember { mutableStateOf(false) }
 
                     DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
-                        getAvailableTranslations().forEach {translationItem ->
+                        getAssetTranslations().forEach {translationItem ->
                             TranslationDropDownMenuItem(
                                 settingExpanded,
                                 bibleState,
@@ -578,13 +576,7 @@ fun SingleBible(bibleState: BibleState){
     val translation = bibleState.mainTranslation
     val book = bibleState.book
     val chapter = bibleState.chapter
-
-    val chapterText = if(translation.isAssets()){
-        chapterTextFromAssets(translation = translation, book = book, chapter = chapter)
-    } else {
-        chapterTextFromDataDir(translation = translation, book = book, chapter = chapter)
-    }
-
+    val chapterText = chapterTextFromAssets(translation = translation, book = book, chapter = chapter)
     val verses = splitChapterToVerses(chapterText)
     val scrollState = rememberScrollState()
 
@@ -643,17 +635,8 @@ private fun getVersePairs(bibleState: BibleState): List<Pair<String, String>> {
     val book = bibleState.book
     val chapter = bibleState.chapter
 
-    val mainChapterText = if (mainTranslation.isAssets()) {
-        chapterTextFromAssets(translation = mainTranslation, book = book, chapter = chapter)
-    } else {
-        chapterTextFromDataDir(translation = mainTranslation, book = book, chapter = chapter)
-    }
-
-    val subChapterText = if (subTranslation.isAssets()) {
-        chapterTextFromAssets(translation = subTranslation, book = book, chapter = chapter)
-    } else {
-        chapterTextFromDataDir(translation = subTranslation, book = book, chapter = chapter)
-    }
+    val mainChapterText = chapterTextFromAssets(translation = mainTranslation, book = book, chapter = chapter)
+    val subChapterText = chapterTextFromAssets(translation = subTranslation, book = book, chapter = chapter)
 
     val mainVerses = splitChapterToVerses(mainChapterText)
     val subVerses = splitChapterToVerses(subChapterText)
@@ -822,10 +805,4 @@ fun chapterTextFromAssets(translation: Translation, book: Int, chapter: Int): St
         sb.append("\n")
     }
     return sb.toString()
-}
-
-@Composable
-fun chapterTextFromDataDir(translation: Translation, book: Int, chapter: Int): String{
-    //TODO implement logic to open downloaded text files in zip
-    return ""
 }

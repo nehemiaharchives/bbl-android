@@ -196,7 +196,7 @@ fun Bible(modifier: Modifier = Modifier) {
     val initialBibleState = rememberBibleState()
     var bibleState by rememberSaveable { mutableStateOf(initialBibleState) }
 
-    Log.d("Bible Lifecycle", "by rememberSaveable { mutableStateOf(initialBibleState) } called, bibleState:$bibleState")
+    Log.d("Bible Lifecycle", "by rememberSavable { mutableStateOf(initialBibleState) } called, bibleState:$bibleState")
 
     var bibleTitle by rememberSaveable { mutableStateOf(bibleState.describeBookChapter()) }
     var zoom by remember { mutableFloatStateOf(bibleState.fontSize.toFloat()) }

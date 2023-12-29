@@ -60,7 +60,7 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     tb(Language.pt, 1917, Books.PORTUGUESE_NUMBER_NAME_MAP, "Tradução Brasileira", 4),    // tb,           Portuguese
 
     // Europe
-    delut(Language.de, 1912, SparseArray(0)/* TODO implement */, "Lutherbibel", 5), // delut,        German
+    delut(Language.de, 1912, Books.GERMAN_NUMBER_NAME_MAP, "Lutherbibel", 5), // delut,        German
 
     // UK already included in English above
     lsg(Language.fr, 1910, SparseArray(0)/* TODO implement */, "Louis Segond Bible", 6),  // lsg,          French

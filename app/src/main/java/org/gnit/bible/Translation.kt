@@ -15,7 +15,7 @@ import org.gnit.bible.ui.widgets.scSansFontFamily
 import org.gnit.bible.ui.widgets.scSerifFontFamily
 
 enum class Language {
-    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja, vi;
+    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja, vi, tl;
 
     fun defaultTranslation() = when(this){
         en -> Translation.webus
@@ -33,17 +33,18 @@ enum class Language {
         ko -> Translation.krv
         ja -> Translation.jc
         vi -> Translation.kttv
+        tl -> Translation.abtag
     }
 
     fun serifFontFamily() = when(this){
-        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi -> enSerifFontFamily
+        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi, tl -> enSerifFontFamily
         zh -> scSerifFontFamily
         ko -> koSerifFontFamily
         ja -> jaSerifFontFamily
     }
 
     fun sansFontFamily() = when(this){
-        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi -> enSansFontFamily
+        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi, tl -> enSansFontFamily
         zh -> scSansFontFamily
         ko -> koSansFontFamily
         ja -> jaSansFontFamily
@@ -81,6 +82,7 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
 
     // South East Asia
     kttv(Language.vi, 1925, Books.VIETNAMESE_NUMBER_NAME_MAP, "Kinh Thánh Tiếng Việt", 16), // Vietnamese
+    abtag(Language.tl, 1905, Books.TAGALOG_NUMBER_NAME_MAP, "Ang Biblia", 17)
     ;
 
     fun shortName() = when(this){

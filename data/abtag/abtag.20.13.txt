@@ -1,0 +1,19 @@
+2 Ang tao ay kakain ng mabuti ayon
+4 Ang tamad ay nagnanasa, at walang anoman:
+5 Ang matuwid ay nagtatanim sa pagsisinungaling:
+6 Bumabantay
+8 Ang katubusan sa buhay ng tao ay siyang kaniyang mga kayamanan:
+9 Ang ilaw ng matuwid ay nagagalak:
+10 Sa kapalaluan, ang dumarating ay pagtatalo lamang:
+11 Ang kayamanang tinangkilik sa walang kabuluhan ay
+12 Ang pagasa na nagluluwat ay nagpapasakit ng puso:
+15 Ang mabuting kaunawaan ay nagbibigay lingap:
+16 Bawa't mabait na tao ay gumagawang may kaalaman:
+17 Ang masamang sugo ay nahuhulog sa kasamaan:
+# Nguni't ang tapat na
+18 Karalitaan at kahihiyan ang
+# Nguni't
+19 Ang nasa na natupad ay matamis sa kaluluwa:
+20 Lumalakad ka na kasama ng mga pantas na tao, at ikaw ay magiging pantas;
+22 Ang mabuti ay nagiiwan ng mana sa mga anak ng kaniyang mga anak;
+23 Maraming pagkain

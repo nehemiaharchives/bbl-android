@@ -1,0 +1,18 @@
+1 Oh
+2 Sapagka't
+3 Sila'y nagsisitanggap ng payong may katusuhan laban sa iyong bayan,
+# At nangagsanggunian
+4 Kanilang sinabi, Kayo'y parito, at atin silang
+5 Sapagka't sila'y nangagsangguniang magkakasama na may isang pagkakaayon;
+# Ang Moab at ang mga
+7 Ang
+8 Pati ng
+9 Gumawa ka sa kanila ng gaya
+# Gaya
+10 Na nangamatay sa Endor;
+11 Gawin mo ang kanilang mga maginoo na gaya
+# Oo, lahat nilang mga pangulo ay gaya ni
+12 Na siyang nagsipagsabi,
+14 Parang apoy na sumusunog ng gubat,
+15 Kaya't habulin mo sila ng iyong bagyo,
+17 Mangapahiya sila at manganglupaypay magpakailan man;

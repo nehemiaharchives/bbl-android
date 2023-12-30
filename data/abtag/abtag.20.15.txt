@@ -1,0 +1,26 @@
+1 Ang
+2 Ang dila ng pantas ay nagbabadya ng tuos ng kaalaman:
+5 Hinahamak
+6 Sa bahay ng matuwid ay maraming kayamanan:
+7 Ang mga labi ng pantas ay nagsasabog ng kaalaman:
+9 Ang lakad ng masama ay kasuklamsuklam sa Panginoon:
+# Nguni't iniibig niya
+10 May mabigat na saway sa kaniya, na nagpapabaya ng lakad:
+12 Ayaw
+14 Ang puso niyaong naguunawa ay humahanap ng kaalaman:
+15 Lahat ng mga araw sa nagdadalamhati ay masama:
+19 Ang daan ng tamad ay gaya ng bakuran na mga dawag:
+20 Ang pantas na anak ay nagpapasaya ng ama:
+21 Ang kamangmangan ay kagalakan sa walang bait:
+22 Kung saan walang payo ay nagugulo ang mga panukala:
+23 Ang tao ay may kagalakan sa sagot ng kaniyang bibig:
+# At
+24 Sa pantas ay paitaas
+25 Bubunutin
+# Nguni't kaniyang itatatag ang hangganan
+26 Ang mga masamang katha ay kasuklamsuklam sa Panginoon:
+27 Siyang sakim sa pakinabang ay bumabagabag ng kaniyang sariling sangbahayan:
+28 Ang puso ng matuwid ay
+29 Ang Panginoon ay malayo sa masama:
+31 Ang taingang nakikinig sa saway ng buhay,
+32 Siyang tumatanggi sa saway ay humahamak sa kaniyang sariling kaluluwa:

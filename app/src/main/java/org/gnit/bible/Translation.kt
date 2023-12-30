@@ -17,7 +17,7 @@ import org.gnit.bible.ui.widgets.scSansFontFamily
 import org.gnit.bible.ui.widgets.scSerifFontFamily
 
 enum class Language {
-    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja, vi, tl, ne;
+    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja, vi, tl, ne, id;
 
     fun defaultTranslation() = when(this){
         en -> Translation.webus
@@ -37,10 +37,11 @@ enum class Language {
         vi -> Translation.kttv
         tl -> Translation.abtag
         ne -> Translation.npiulb
+        id -> Translation.itb
     }
 
     fun serifFontFamily() = when(this){
-        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi, tl -> enSerifFontFamily
+        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi, tl, id -> enSerifFontFamily
         zh -> scSerifFontFamily
         ko -> koSerifFontFamily
         ja -> jaSerifFontFamily
@@ -48,7 +49,7 @@ enum class Language {
     }
 
     fun sansFontFamily() = when(this){
-        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi, tl -> enSansFontFamily
+        en, es, pt, de, fr, ru, nl, it, pl, uk, sv, vi, tl, id -> enSansFontFamily
         zh -> scSansFontFamily
         ko -> koSansFontFamily
         ja -> jaSansFontFamily
@@ -59,36 +60,36 @@ enum class Language {
 @Serializable(with = TranslationSerializer::class)
 enum class Translation(val language: Language, val year: Int, val books: SparseArray<String>, val nativeName: String, val defaultSortOrder: Int) {
     // English World
-    webus(Language.en, 2000, Books.ENGLISH_NUMBER_NAME_MAP, "World English Bible", 1), // English
-    kjv(Language.en, 1611, Books.ENGLISH_NUMBER_NAME_MAP, "King James Version", 2), // English
+    webus(Language.en, 2000, Books.ENGLISH_NUMBER_NAME_MAP, "World English Bible", 1), // English, Free of use
+    kjv(Language.en, 1611, Books.ENGLISH_NUMBER_NAME_MAP, "King James Version", 2), // English, Public Domain
 
     // Latin America
-    rvr09(Language.es, 1909, Books.SPANISH_NUMBER_NAME_MAP, "Reina Valera", 3), // Spanish
-    tb(Language.pt, 1917, Books.PORTUGUESE_NUMBER_NAME_MAP, "Tradução Brasileira", 4), // Portuguese
+    rvr09(Language.es, 1909, Books.SPANISH_NUMBER_NAME_MAP, "Reina Valera", 3), // Spanish, Public Domain
+    tb(Language.pt, 1917, Books.PORTUGUESE_NUMBER_NAME_MAP, "Tradução Brasileira", 4), // Portuguese, Public Domain
 
     // Europe
-    delut(Language.de, 1912, Books.GERMAN_NUMBER_NAME_MAP, "Lutherbibel", 5), // German
+    delut(Language.de, 1912, Books.GERMAN_NUMBER_NAME_MAP, "Lutherbibel", 5), // German, Public Domain
 
     // UK already included in English above
-    lsg(Language.fr, 1910, Books.FRENCH_NUMBER_NAME_MAP, "Louis Segond Bible", 6), //French
-    sinod(Language.ru, 1876, Books.RUSSIAN_NUMBER_NAME_MAP, "Синодальный перевод", 7), //Russian
-    svrj(Language.nl, 1888, Books.DUTCH_NUMBER_NAME_MAP, "Statenvertaling Jongbloed-editie", 8), //Dutch
-    rdv24(Language.it, 1924, Books.ITALIAN_NUMBER_NAME_MAP, "Versione Diodati Riveduta", 9), //Italian,
+    lsg(Language.fr, 1910, Books.FRENCH_NUMBER_NAME_MAP, "Louis Segond Bible", 6), //French, Public Domain
+    sinod(Language.ru, 1876, Books.RUSSIAN_NUMBER_NAME_MAP, "Синодальный перевод", 7), //Russian, Public Domain
+    svrj(Language.nl, 1888, Books.DUTCH_NUMBER_NAME_MAP, "Statenvertaling Jongbloed-editie", 8), //Dutch, Public Domain
+    rdv24(Language.it, 1924, Books.ITALIAN_NUMBER_NAME_MAP, "Versione Diodati Riveduta", 9), //Italian, Public Domain
 
     // Spain  already included in Spanish above
     ubg(Language.pl, 2017, Books.POLISH_NUMBER_NAME_MAP, "Uwspółcześniona Biblia gdańska", 10), //Polish
     ubio(Language.uk, 1962, Books.UKRAINIAN_NUMBER_NAME_MAP, "Біблія в пер. Івана Огієнка", 11), //Ukrainian
-    sven(Language.sv, 1917, Books.SWEDISH_NUMBER_NAME_MAP, "1917 års kyrkobibel", 12), //Swedish
+    sven(Language.sv, 1917, Books.SWEDISH_NUMBER_NAME_MAP, "1917 års kyrkobibel", 12), //Swedish, Public Domain
 
     // North East Asia
-    cunp(Language.zh, 1919, Books.CHINESE_NUMBER_NAME_MAP, "和合本", 13), // Chinese, Chinese Union Version with New Punctuation
+    cunp(Language.zh, 1919, Books.CHINESE_NUMBER_NAME_MAP, "和合本", 13), // Chinese, Chinese Union Version with New Punctuation, Public Domain
     krv(Language.ko, 1961, Books.KOREAN_NUMBER_NAME_MAP, "개역한글", 14), // Korean, Korean Revised Version
-    jc(Language.ja, 1955, Books.JAPANESE_JC_NUMBER_NAME_MAP, "口語訳", 15), // Japanese, Colloquial Japanese
+    jc(Language.ja, 1955, Books.JAPANESE_JC_NUMBER_NAME_MAP, "口語訳", 15), // Japanese, Colloquial Japanese, Public Domain
 
     // South East Asia
-    kttv(Language.vi, 1925, Books.VIETNAMESE_NUMBER_NAME_MAP, "Kinh Thánh Tiếng Việt", 16), // Vietnamese
-    abtag(Language.tl, 1905, Books.TAGALOG_NUMBER_NAME_MAP, "Ang Biblia", 17), // Tagalog
-    //18 TODO Indonesian
+    kttv(Language.vi, 1925, Books.VIETNAMESE_NUMBER_NAME_MAP, "Kinh Thánh Tiếng Việt", 16), // Vietnamese, Public Domain
+    abtag(Language.tl, 1905, Books.TAGALOG_NUMBER_NAME_MAP, "Ang Biblia", 17), // Tagalog, Public Domain
+    itb(Language.id, 1994, Books.INDONESIAN_NUMBER_NAME_MAP, "Indonesian Terjemahan Baru", 18), // Indonesian, Copyright Lembaga Alkitab Indonesia (Indonesian Bible Society), 1994. Released for non-profit scholarly and personal use. Not to be sold for profit.
     //19 TODO Thai
 
     // South Asia

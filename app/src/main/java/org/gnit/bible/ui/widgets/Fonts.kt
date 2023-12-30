@@ -36,3 +36,11 @@ val koSerifFontFamily = FontFamily(
 val koSansFontFamily = FontFamily(
     Font(R.font.notosans_kr_regular_bible_krv_subset, FontWeight.Normal)
 )
+
+val devanagariSerifFontFamily = FontFamily(
+    Font(R.font.notoserif_devanagari_regular, FontWeight.Normal)
+)
+
+val devanagariSansFontFamily = FontFamily(
+    Font(R.font.notosans_devanagari_regular, FontWeight.Normal)
+)

@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.serialization.Serializable
 import org.gnit.bible.lib.TranslationSerializer
+import org.gnit.bible.ui.widgets.devanagariSansFontFamily
+import org.gnit.bible.ui.widgets.devanagariSerifFontFamily
 import org.gnit.bible.ui.widgets.enSansFontFamily
 import org.gnit.bible.ui.widgets.enSerifFontFamily
 import org.gnit.bible.ui.widgets.jaSansFontFamily
@@ -15,7 +17,7 @@ import org.gnit.bible.ui.widgets.scSansFontFamily
 import org.gnit.bible.ui.widgets.scSerifFontFamily
 
 enum class Language {
-    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja, vi, tl;
+    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja, vi, tl, ne;
 
     fun defaultTranslation() = when(this){
         en -> Translation.webus
@@ -34,6 +36,7 @@ enum class Language {
         ja -> Translation.jc
         vi -> Translation.kttv
         tl -> Translation.abtag
+        ne -> Translation.npiulb
     }
 
     fun serifFontFamily() = when(this){
@@ -41,6 +44,7 @@ enum class Language {
         zh -> scSerifFontFamily
         ko -> koSerifFontFamily
         ja -> jaSerifFontFamily
+        ne -> devanagariSerifFontFamily
     }
 
     fun sansFontFamily() = when(this){
@@ -48,6 +52,7 @@ enum class Language {
         zh -> scSansFontFamily
         ko -> koSansFontFamily
         ja -> jaSansFontFamily
+        ne -> devanagariSansFontFamily
     }
 }
 
@@ -82,7 +87,23 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
 
     // South East Asia
     kttv(Language.vi, 1925, Books.VIETNAMESE_NUMBER_NAME_MAP, "Kinh Thánh Tiếng Việt", 16), // Vietnamese
-    abtag(Language.tl, 1905, Books.TAGALOG_NUMBER_NAME_MAP, "Ang Biblia", 17)
+    abtag(Language.tl, 1905, Books.TAGALOG_NUMBER_NAME_MAP, "Ang Biblia", 17), // Tagalog
+    //18 TODO Indonesian
+    //19 TODO Thai
+
+    // South Asia
+    //20 TODO Hindi
+    //21 TODO Bengali
+    //22 TODO Urdu
+    //23 TODO Marathi
+    //24 TODO Telugu
+    //25 TODO Tamil
+    npiulb(Language.ne, 2019, Books.NEPALI_NUMBER_NAME_MAP, "पवित्र बाइबल", 26), // Nepali, The Holy Bible in the Nepali language, Unlocked Literal Bible translation copyright © 2019 Door43 World Missions Community Creative Commons Attribution Share-Alike license 4.0.
+
+    // Middle East
+    //27 TODO Modern Standard Arabic
+    //28 TODO Egyptian Arabic
+    //29 TODO Turkish
     ;
 
     fun shortName() = when(this){

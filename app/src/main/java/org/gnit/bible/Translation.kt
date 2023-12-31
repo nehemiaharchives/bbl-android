@@ -31,7 +31,7 @@ enum class Language {
         nl -> Translation.svrj
         it -> Translation.rdv24
         pl -> Translation.ubg
-        uk -> Translation.ubio
+        uk -> Translation.ukrk
         sv -> Translation.sven
         zh -> Translation.cunp
         ko -> Translation.krv
@@ -82,8 +82,8 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     rdv24(Language.it, 1924, Books.ITALIAN_NUMBER_NAME_MAP, "Versione Diodati Riveduta", 9), //Italian, Public Domain
 
     // Spain  already included in Spanish above
-    ubg(Language.pl, 2017, Books.POLISH_NUMBER_NAME_MAP, "Uwspółcześniona Biblia gdańska", 10), //Polish
-    ubio(Language.uk, 1962, Books.UKRAINIAN_NUMBER_NAME_MAP, "Біблія в пер. Івана Огієнка", 11), //Ukrainian
+    ubg(Language.pl, 2017, Books.POLISH_NUMBER_NAME_MAP, "Uwspółcześniona Biblia gdańska", 10), //Polish, Copyright Uwspółcześniona Biblia Gdańska, All rights to reproduce and distribute free of charge are granted as long as the text of said publication is not altered in any way. Reproduction and distribution for profit requires written consent from the Publisher.
+    ukrk(Language.uk, 1905, Books.UKRAINIAN_NUMBER_NAME_MAP, "Біблія в пер. П.Куліша та І.Пулюя", 11), //Ukrainian, Public Domain
     sven(Language.sv, 1917, Books.SWEDISH_NUMBER_NAME_MAP, "1917 års kyrkobibel", 12), //Swedish, Public Domain
 
     // North East Asia

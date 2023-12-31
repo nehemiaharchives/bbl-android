@@ -108,7 +108,7 @@ data class BibleState(
     fun nextChapter() = copy(chapter = chapter + 1)
     fun isLastChapter() = (chapter == Books.maxChapter(book))
     fun lastChapter() = Books.maxChapter(book)
-    fun describeBookChapter() = "${mainTranslation.books[book]} $chapter"
+    fun describeBookChapter() = "${mainTranslation.books()[book]} $chapter"
     fun isSingleMain(translationToCompare: Translation) = (readingMode == ReadingMode.SINGLE && mainTranslation == translationToCompare)
     fun isSideMain(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_SIDE && mainTranslation == translationToCompare)
     fun isSideMainOrSub(translationToCompare: Translation) = (readingMode == ReadingMode.BILINGUAL_SIDE && (mainTranslation == translationToCompare || subTranslation == translationToCompare))
@@ -129,12 +129,8 @@ const val SPACE_BETWEEN_VERSES_MAX = 50
 const val SHARED_PREFERENCE_NAME = "Bible"
 const val SHARED_PREFERENCE_KEY_BIBLE_STATE = "bible_state"
 
-
-
 @Composable
 fun rememberBibleState(): BibleState {
-
-
 
     lateinit var initialBibleState: BibleState
 

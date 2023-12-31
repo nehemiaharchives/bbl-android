@@ -40,17 +40,3 @@ object SparseArraySerializer : KSerializer<SparseArray<String>>{
         return array
     }
 }
-
-object TranslationSerializer: KSerializer<Translation>{
-
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Translation", PrimitiveKind.STRING)
-
-    override fun serialize(encoder: Encoder, value: Translation) {
-        encoder.encodeString(value.name)
-    }
-
-    override fun deserialize(decoder: Decoder): Translation {
-        val value = decoder.decodeString()
-        return Translation.valueOf(value)
-    }
-}

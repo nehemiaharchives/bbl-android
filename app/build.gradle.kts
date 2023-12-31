@@ -51,8 +51,12 @@ android {
     }
 }
 
-dependencies {
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
+}
 
+dependencies {
+    implementation("org.gnit.bible:bbl-core:1.0-SNAPSHOT@jar")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.2")

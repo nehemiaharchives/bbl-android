@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("file:../bbl-core/.m2/repository")
     }
 }
 

@@ -87,7 +87,11 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     sven(Language.sv, 1917, Books.SWEDISH_NUMBER_NAME_MAP, "1917 års kyrkobibel", 12), //Swedish, Public Domain
 
     // North East Asia
-    cunp(Language.zh, 1919, Books.CHINESE_NUMBER_NAME_MAP, "和合本", 13), // Chinese, Chinese Union Version with New Punctuation, Public Domain
+    cunp(Language.zh, 1919, Books.CHINESE_NUMBER_NAME_MAP, "和合本", 13), // Chinese, Chinese Union Version with New Punctuation 新标点和合本, 神版 (Shén, e), Public Domain, default Chinese
+    // TODO cunpsa(Language.zh, 1919, Books.CHINESE_NUMBER_NAME_MAP, "和合本", 13), // Chinese, Chinese Union Version with New Punctuation 新标点和合本, 上帝版(Shàngdì, a), Public Domain
+    // TODO cunpte(Language.zh-TW,) //t: traditional e: 神版 (Shén, e)
+    // TODO cunpta(Language.zh-TW,) //t: traditional a: 上帝版(Shàngdì, a)
+
     krv(Language.ko, 1961, Books.KOREAN_NUMBER_NAME_MAP, "개역한글", 14), // Korean, Korean Revised Version
     jc(Language.ja, 1955, Books.JAPANESE_JC_NUMBER_NAME_MAP, "口語訳", 15), // Japanese, Colloquial Japanese, Public Domain
 

@@ -15,9 +15,11 @@ import org.gnit.bible.ui.widgets.koSansFontFamily
 import org.gnit.bible.ui.widgets.koSerifFontFamily
 import org.gnit.bible.ui.widgets.scSansFontFamily
 import org.gnit.bible.ui.widgets.scSerifFontFamily
+import org.gnit.bible.ui.widgets.thaiSansFontFamily
+import org.gnit.bible.ui.widgets.thaiSerifFontFamily
 
 enum class Language {
-    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja, vi, tl, ne, id;
+    en, es, pt, de, fr, ru, nl, it, pl, uk, sv, zh, ko, ja, vi, tl, ne, id, th;
 
     fun defaultTranslation() = when(this){
         en -> Translation.webus
@@ -38,6 +40,7 @@ enum class Language {
         tl -> Translation.abtag
         ne -> Translation.npiulb
         id -> Translation.itb
+        th -> Translation.th1971
     }
 
     fun serifFontFamily() = when(this){
@@ -46,6 +49,7 @@ enum class Language {
         ko -> koSerifFontFamily
         ja -> jaSerifFontFamily
         ne -> devanagariSerifFontFamily
+        th -> thaiSerifFontFamily
     }
 
     fun sansFontFamily() = when(this){
@@ -54,6 +58,7 @@ enum class Language {
         ko -> koSansFontFamily
         ja -> jaSansFontFamily
         ne -> devanagariSansFontFamily
+        th -> thaiSansFontFamily
     }
 }
 
@@ -90,7 +95,7 @@ enum class Translation(val language: Language, val year: Int, val books: SparseA
     kttv(Language.vi, 1925, Books.VIETNAMESE_NUMBER_NAME_MAP, "Kinh Thánh Tiếng Việt", 16), // Vietnamese, Public Domain
     abtag(Language.tl, 1905, Books.TAGALOG_NUMBER_NAME_MAP, "Ang Biblia", 17), // Tagalog, Public Domain
     itb(Language.id, 1994, Books.INDONESIAN_NUMBER_NAME_MAP, "Indonesian Terjemahan Baru", 18), // Indonesian, Copyright Lembaga Alkitab Indonesia (Indonesian Bible Society), 1994. Released for non-profit scholarly and personal use. Not to be sold for profit.
-    //19 TODO Thai
+    th1971(Language.th, 1971, Books.THAI_NUMBER_NAME_MAP, "พระคริสตธรรมคัมภีร์ ฉบับ1971", 19), // Thai, 1971 Bible, Public Domain
 
     // South Asia
     //20 TODO Hindi

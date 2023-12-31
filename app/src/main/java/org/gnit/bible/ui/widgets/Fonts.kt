@@ -44,3 +44,11 @@ val devanagariSerifFontFamily = FontFamily(
 val devanagariSansFontFamily = FontFamily(
     Font(R.font.notosans_devanagari_regular, FontWeight.Normal)
 )
+
+val thaiSerifFontFamily = FontFamily(
+    Font(R.font.notoserif_thai_regular, FontWeight.Normal)
+)
+
+val thaiSansFontFamily = FontFamily(
+    Font(R.font.notosans_thai_regular, FontWeight.Normal)
+)

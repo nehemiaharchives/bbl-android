@@ -52,3 +52,11 @@ val thaiSerifFontFamily = FontFamily(
 val thaiSansFontFamily = FontFamily(
     Font(R.font.notosans_thai_regular, FontWeight.Normal)
 )
+
+val tcSerifFontFamily = FontFamily(
+    Font(R.font.notoserif_tc_regular_bible_cunp_subset, FontWeight.Normal)
+)
+
+val tcSansFontFamily = FontFamily(
+    Font(R.font.notosans_tc_regular_bible_cunp_subset, FontWeight.Normal)
+)

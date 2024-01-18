@@ -15,6 +15,8 @@ import org.gnit.bible.ui.widgets.scSerifFontFamily
 import org.gnit.bible.ui.widgets.thaiSansFontFamily
 import org.gnit.bible.ui.widgets.thaiSerifFontFamily
 import org.gnit.bible.Translation.*
+import org.gnit.bible.ui.widgets.tcSerifFontFamily
+import org.gnit.bible.ui.widgets.tcSansFontFamily
 
 fun Translation.books() = when(this){
     webus, kjv -> Books.ENGLISH_NUMBER_NAME_MAP
@@ -28,7 +30,8 @@ fun Translation.books() = when(this){
     ubg -> Books.POLISH_NUMBER_NAME_MAP
     ukrk -> Books.UKRAINIAN_NUMBER_NAME_MAP
     sven -> Books.SWEDISH_NUMBER_NAME_MAP
-    cunp /*TODO ,cunpsa, cunpte, cunpta */ -> Books.CHINESE_NUMBER_NAME_MAP
+    cunp, cunpsa -> Books.CHINESE_NUMBER_NAME_MAP
+    cunpte, cunpta -> Books.TRADITIONAL_CHINESE_NUMBER_NAME_MAP
     krv -> Books.KOREAN_NUMBER_NAME_MAP
     jc -> Books.JAPANESE_JC_NUMBER_NAME_MAP
     kttv -> Books.VIETNAMESE_NUMBER_NAME_MAP
@@ -50,6 +53,7 @@ fun Translation.books() = when(this){
 fun Language.serifFontFamily() = when(this){
     Language.en, Language.es, Language.pt, Language.de, Language.fr, Language.ru, Language.nl, Language.it, Language.pl, Language.uk, Language.sv, Language.vi, Language.tl, Language.id -> enSerifFontFamily
     Language.zh -> scSerifFontFamily
+    Language.zhtw -> tcSerifFontFamily
     Language.ko -> koSerifFontFamily
     Language.ja -> jaSerifFontFamily
     Language.ne -> devanagariSerifFontFamily
@@ -59,6 +63,7 @@ fun Language.serifFontFamily() = when(this){
 fun Language.sansFontFamily() = when(this){
     Language.en, Language.es, Language.pt, Language.de, Language.fr, Language.ru, Language.nl, Language.it, Language.pl, Language.uk, Language.sv, Language.vi, Language.tl, Language.id -> enSansFontFamily
     Language.zh -> scSansFontFamily
+    Language.zhtw -> tcSansFontFamily
     Language.ko -> koSansFontFamily
     Language.ja -> jaSansFontFamily
     Language.ne -> devanagariSansFontFamily
